@@ -1,0 +1,166 @@
+#include "HMI/mainwindow.h"
+#include <QKeyEvent>
+#include <QFileDialog>
+#include <QLineEdit>
+
+#include "ui_mainwindow.h"
+#include "HMI/player.h"
+
+MainWindow::MainWindow(QWidget *parent) noexcept :
+    QMainWindow(parent),
+    ui(new Ui::MainWindow)
+{
+    initUI();
+    initNetwork();
+    initSlotConnections();
+
+    qApp->installEventFilter(this);
+}
+
+MainWindow::~MainWindow() noexcept
+{
+    delete ui;
+}
+
+bool MainWindow::eventFilter(QObject* object, QEvent* event)
+{
+    if (event->type() == QEvent::KeyPress)
+    {
+        const auto keyEvent = static_cast<QKeyEvent*>(event);
+        const auto focus = QApplication::focusWidget();
+        const auto noLineEditInFocus = (focus == nullptr || qobject_cast<QLineEdit*>(focus) == nullptr);
+
+        if (keyEvent->key() == Qt::Key_Space)
+        {
+            if (noLineEditInFocus)
+            {
+                ui->player->togglePause();
+                return true;
+            }
+            return false;
+        }
+        if (keyEvent->key() == Qt::Key_F11)
+        {
+            if (ui->menuBar->isHidden())
+            {
+                toggleFullscreen();
+            }
+            return false;
+        }
+        if (keyEvent->key() == Qt::Key_Escape)
+        {
+            if (isFullScreen())
+            {
+                toggleFullscreen();
+            }
+            return false;
+        }
+        if (keyEvent->key() == Qt::Key_Left)
+        {
+            if (noLineEditInFocus)
+            {
+                ui->player->goBack();
+                return true;
+            }
+            return false;
+        }
+        if (keyEvent->key() == Qt::Key_Right)
+        {
+            if (noLineEditInFocus)
+            {
+                ui->player->goForward();
+                return true;
+            }
+            return false;
+        }
+
+    }
+    if (event->type() == QEvent::MouseMove)
+    {
+        showUI();
+        if (isFullScreen() && ui->player->underMouse())
+        {
+            hideUITimer.start(hideDelayMS);
+        }
+        return false;
+    }
+    return QObject::eventFilter(object, event);
+}
+
+void MainWindow::showUI() noexcept
+{
+    ui->menuBar->show();
+    ui->networkDock->show();
+    ui->player->showUI();
+    hideUITimer.stop();
+}
+
+void MainWindow::hideUI() noexcept
+{
+    ui->menuBar->hide();
+    if (ui->networkDock->isFloating() == false)
+    {
+        ui->networkDock->hide();
+    }
+    ui->player->hideUI();
+}
+
+void MainWindow::toggleFullscreen() noexcept
+{
+    if (isFullScreen())
+    {
+        showUI();
+        showNormal();
+    }
+    else
+    {
+        hideUI();
+        showFullScreen();
+    }
+}
+
+void MainWindow::initUI() noexcept
+{
+    ui->setupUi(this);
+    ui->centralWidget->hide();
+    splitDockWidget(ui->networkDock, ui->playerDock, Qt::Horizontal);
+}
+
+void MainWindow::initNetwork() noexcept
+{
+    ui->networkDisplay->setClient(&client);
+    ui->player->setClient(&client);
+}
+
+void MainWindow::initSlotConnections() noexcept
+{
+    ui->actionShow_Network->setChecked(ui->networkDock->isVisible());
+    ui->actionShow_Player->setChecked(ui->playerDock->isVisible());
+
+    connect(ui->actionShow_Network, SIGNAL(toggled(bool)),
+            ui->networkDock, SLOT(setVisible(bool)));
+    connect(ui->actionShow_Player, SIGNAL(toggled(bool)),
+            ui->playerDock, SLOT(setVisible(bool)));
+
+    connect(ui->networkDock, SIGNAL(visibilityChanged(bool)),
+            ui->actionShow_Network, SLOT(setChecked(bool)));
+    connect(ui->playerDock, SIGNAL(visibilityChanged(bool)),
+            ui->actionShow_Player, SLOT(setChecked(bool)));
+
+    connect(ui->actionFullscreen, SIGNAL(triggered(bool)),
+            this, SLOT(toggleFullscreen()));
+
+    connect(&hideUITimer, SIGNAL(timeout()), this, SLOT(hideUI()));
+    connect(ui->actionOpen, &QAction::triggered,
+            [this]()
+    {
+        QString file = QFileDialog::getOpenFileName(this, tr("Open file"),
+                                                    QDir::homePath(),
+                                                    tr("Multimedia files(*)"));
+
+        if (file.isEmpty())
+            return;
+
+        ui->player->playFile(file);
+    });
+}
