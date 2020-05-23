@@ -14,7 +14,10 @@ Client::Client() noexcept
     connect(socket, SIGNAL(disconnected()), this, SLOT(onDisconnected()));
     connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(socketError()));
     connect(socket, SIGNAL(readyRead()), this, SLOT(dataReceived()));
-    timeSinceLastTimestampSent.start();
+    lastTimestampSentTimer.setInterval(minIntervalBetweenTimestamps);
+    lastTimestampSentTimer.setSingleShot(true);
+    lastTimestampSentTimer.start();
+    connect(&lastTimestampSentTimer, SIGNAL(timeout()), this, SLOT(sendLastUnsentTimestamp()));
 }
 
 Client::~Client() noexcept
@@ -55,13 +58,26 @@ void Client::sendChat(QString chatMessage) noexcept
 
 void Client::sendTimestamp(const Timestamp& timestamp) noexcept
 {
-    constexpr auto minIntervalBetweenTimestamps = 50;
     // Avoid timestamp message spam
-    if (timeSinceLastTimestampSent.elapsed() > minIntervalBetweenTimestamps)
+    if (lastTimestampSentTimer.isActive() == false ||
+            lastTimestampSentTimer.remainingTime() == 0)
     {
         sendMessage(Message(Message::Type::Timestamp, QVariant::fromValue<Timestamp>(timestamp)));
-        timeSinceLastTimestampSent.start();
+        lastTimestampSentTimer.start();
     }
+    else if (lastTimestampSentTimer.remainingTime() < minIntervalBetweenTimestamps)
+    {
+        lastUnsentTimestamp = timestamp;
+    }
+}
+
+void Client::sendLastUnsentTimestamp() noexcept
+{
+    if (lastUnsentTimestamp.has_value())
+    {
+        sendTimestamp(lastUnsentTimestamp.value());
+    }
+    lastUnsentTimestamp = {};
 }
 
 void Client::setName(const QString& name) noexcept
