@@ -14,7 +14,7 @@ bool CustomSignalsMediaPlayer::isPaused() const noexcept
 
 bool CustomSignalsMediaPlayer::videoIsOn() const noexcept
 {
-    constexpr auto msToEnd = 200;
+    constexpr auto msToEnd = 500;
     return (currentMedia() != nullptr && (time() < currentMedia()->duration() - msToEnd));
 }
 
