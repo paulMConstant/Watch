@@ -58,6 +58,8 @@ void NetworkDisplay::onDisconnected() noexcept
     ui->connectedUsersList->clear();
     ui->IPline->setEnabled(true);
     ui->IPlabel->setEnabled(true);
+    ui->nameLine->setEnabled(true);
+    ui->nameLabel->setEnabled(true);
     ui->connectButton->setText("Connect");
 }
 
@@ -65,6 +67,8 @@ void NetworkDisplay::onConnected() noexcept
 {
     ui->IPline->setEnabled(false);
     ui->IPlabel->setEnabled(false);
+    ui->nameLine->setEnabled(false);
+    ui->nameLabel->setEnabled(false);
     ui->connectButton->setText("Disconnect");
 }
 
