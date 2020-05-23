@@ -5,8 +5,7 @@
 #include <QHostAddress>
 #include <QTcpSocket>
 
-#include <algorithm>
-
+#include <Messages/constants.h>
 #include "Logger/logger.h"
 
 Client::Client() noexcept

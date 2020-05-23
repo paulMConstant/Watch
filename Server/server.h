@@ -6,7 +6,7 @@
 #include <QSet>
 #include <QTcpServer>
 #include <QHostAddress>
-#include <Messages/Messages>
+#include <Messages/message.h>
 
 class QTcpSocket;
 

@@ -28,8 +28,7 @@ SOURCES += \
 HEADERS += \
     message.h \
     timestamp.h \
-    constants.h \
-    Messages
+    constants.h
 
 unix {
     target.path = /usr/lib

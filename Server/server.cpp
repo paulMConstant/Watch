@@ -5,6 +5,7 @@
 
 #include <algorithm>
 
+#include <Messages/constants.h>
 #include "Logger/logger.h"
 
 Server::Server() noexcept

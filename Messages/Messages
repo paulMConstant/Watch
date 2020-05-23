@@ -1,8 +1,0 @@
-#ifndef MESSAGES_H
-#define MESSAGES_H
-
-#include "constants.h"
-#include "timestamp.h"
-#include "message.h"
-
-#endif // MESSAGES_H

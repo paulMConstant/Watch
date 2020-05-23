@@ -3,7 +3,7 @@
 
 #include <QWidget>
 
-#include <Messages/Messages>
+#include <Messages/timestamp.h>
 #include "Network/client.h"
 #include "Helpers/customsignalsmediaplayer.h"
 

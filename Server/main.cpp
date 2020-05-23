@@ -1,6 +1,7 @@
 #include <QCoreApplication>
 #include <QMetaType>
 
+#include <Messages/timestamp.h>
 #include "server.h"
 
 int main(int argc, char *argv[])

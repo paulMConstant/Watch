@@ -6,7 +6,8 @@
 #include <QString>
 #include <QTime>
 
-#include <Messages/Messages>
+#include <Messages/timestamp.h>
+#include <Messages/message.h>
 
 class Client : public QObject
 {
