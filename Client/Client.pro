@@ -48,7 +48,7 @@ FORMS += \
     HMI/networkdisplay.ui \
     HMI/mainwindow.ui
 
-LIBS += -L$$PWD/../build-Messages-Desktop-Release -lMessages
+LIBS += -L$$PWD/../../build-Watch-Desktop-Release/Messages -lMessages
 INCLUDEPATH += $$PWD/../
 
 LIBS        += -lVLCQtCore -lVLCQtWidgets
