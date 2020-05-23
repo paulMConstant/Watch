@@ -83,9 +83,13 @@ void NetworkDisplay::updateConnectedUsersList(const QStringList& connectedUsers)
     }
 }
 
+#include <QDebug>
 void NetworkDisplay::sendChatMessage() noexcept
 {
-    client->sendChat(ui->messageLine->text());
+    auto text = ui->messageLine->text();
+    text.replace('<', "&lt;");
+    text.replace('>', "&gt;");
+    client->sendChat(text);
     ui->messageLine->clear();
 }
 

@@ -45,7 +45,10 @@ void Client::disconnectFromServer() noexcept
 
 void Client::sendChat(QString chatMessage) noexcept
 {
-    chatMessage = "<b>" + name + " :</b> " + chatMessage;
+    auto htmlName = name;
+    htmlName.replace('<', "&lt;");
+    htmlName.replace('>', "&gt;");
+    chatMessage = "<b>" + htmlName + " :</b> " + chatMessage;
     Logger::printChatMsg(chatMessage);
     sendMessage(Message(Message::Type::Chat, chatMessage));
 }
