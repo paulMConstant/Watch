@@ -52,12 +52,14 @@
      <string>Window</string>
     </property>
     <addaction name="actionFullscreen"/>
-    <addaction name="actionShow_Network"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuWindow"/>
   </widget>
   <widget class="UncloseableDock" name="networkDock">
+   <property name="features">
+    <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
+   </property>
    <property name="windowTitle">
     <string>Network</string>
    </property>
@@ -66,8 +68,14 @@
    </attribute>
    <widget class="QWidget" name="networkDockContents">
     <layout class="QVBoxLayout" name="verticalLayout">
+     <property name="leftMargin">
+      <number>9</number>
+     </property>
      <property name="topMargin">
-      <number>0</number>
+      <number>9</number>
+     </property>
+     <property name="rightMargin">
+      <number>9</number>
      </property>
      <property name="bottomMargin">
       <number>9</number>

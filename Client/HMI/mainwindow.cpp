@@ -127,14 +127,6 @@ void MainWindow::initNetwork() noexcept
 
 void MainWindow::initSlotConnections() noexcept
 {
-    ui->actionShow_Network->setChecked(ui->networkDock->isVisible());
-
-    connect(ui->actionShow_Network, SIGNAL(toggled(bool)),
-            ui->networkDock, SLOT(setVisible(bool)));
-
-    connect(ui->networkDock, SIGNAL(visibilityChanged(bool)),
-            ui->actionShow_Network, SLOT(setChecked(bool)));
-
     connect(ui->actionFullscreen, SIGNAL(triggered(bool)),
             this, SLOT(toggleFullscreen()));
 
