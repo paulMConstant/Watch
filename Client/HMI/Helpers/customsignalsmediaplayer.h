@@ -61,6 +61,12 @@ class CustomSignalsMediaPlayer : public VlcMediaPlayer
 
   private:
     bool paused = true;
+
+    /*!
+     * \brief returns true if setting the video at this time makes it valid.
+     * \see videoIsPlayable
+     */
+    [[nodiscard]] bool timeIsPlayable(int timeMS) const noexcept;
 };
 
 #endif // CUSTOMSIGNALSMEDIAPLAYER_H

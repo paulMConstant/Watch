@@ -63,6 +63,7 @@ void Client::sendTimestamp(const Timestamp& timestamp) noexcept
             lastTimestampSentTimer.remainingTime() == 0)
     {
         sendMessage(Message(Message::Type::Timestamp, QVariant::fromValue<Timestamp>(timestamp)));
+        lastUnsentTimestamp = {};
         lastTimestampSentTimer.start();
     }
     else if (lastTimestampSentTimer.remainingTime() < minIntervalBetweenTimestamps)

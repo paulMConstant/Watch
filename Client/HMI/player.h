@@ -15,8 +15,6 @@ namespace Ui {
 class Player;
 }
 
-
-
 class Player : public QWidget
 {
     Q_OBJECT

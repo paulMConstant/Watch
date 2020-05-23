@@ -169,7 +169,7 @@ void Player::StopVideoIfEnded() noexcept
 {
     if (player->videoIsPlayable() == false)
     {
-        pause();
+        pause(false);
     }
 }
 
