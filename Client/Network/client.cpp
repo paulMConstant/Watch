@@ -79,6 +79,7 @@ void Client::sendMessage(const Message& message) noexcept
     if (socket->isOpen())
     {
         socket->write(message.toByteArray());
+        socket->flush();
     }
 }
 
@@ -95,25 +96,28 @@ void Client::socketError() noexcept
 
 void Client::dataReceived() noexcept
 {
-    QDataStream in(socket);
-    if (msgSize == 0)
+    while (socket->bytesAvailable())
     {
-        if (socket->bytesAvailable() < static_cast<int>(sizeof(quint16)))
+        QDataStream in(socket);
+        if (msgSize == 0)
         {
-            // Did not receive entire message size
+            if (socket->bytesAvailable() < static_cast<int>(sizeof(quint16)))
+            {
+                // Did not receive entire message size
+                return;
+            }
+            in >> msgSize;
+        }
+        if (socket->bytesAvailable() < msgSize)
+        {
             return;
         }
-        in >> msgSize;
-    }
-    if (socket->bytesAvailable() < msgSize)
-    {
-        return;
-    }
-    auto msg = Message();
-    in >> msg;
-    processMessage(msg);
+        auto msg = Message();
+        in >> msg;
+        processMessage(msg);
 
-    msgSize = 0;
+        msgSize = 0;
+    }
 }
 
 void Client::processMessage(const Message& message) noexcept

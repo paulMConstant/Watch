@@ -29,10 +29,10 @@ Server::~Server() noexcept
 
 void Server::newConnection() noexcept
 {
-    auto client = server->nextPendingConnection();
-    connect(client, SIGNAL(readyRead()), this, SLOT(dataReceived()));
-    connect(client, SIGNAL(disconnected()), this, SLOT(clientDisconnected()));
-    connect(client, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(socketError()));
+    auto socket = server->nextPendingConnection();
+    connect(socket, SIGNAL(readyRead()), this, SLOT(dataReceived()));
+    connect(socket, SIGNAL(disconnected()), this, SLOT(clientDisconnected()));
+    connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(socketError()));
 }
 
 void Server::dataReceived() noexcept
@@ -42,26 +42,28 @@ void Server::dataReceived() noexcept
     {
         return;
     }
-
-    QDataStream in(socket);
-    if (connectedClients[socket].msgSize == 0)
+    while(socket->bytesAvailable())
     {
-        if (socket->bytesAvailable() < static_cast<int>(sizeof(quint16)))
+        QDataStream in(socket);
+        if (connectedClients[socket].msgSize == 0)
         {
-            // Did not receive entire message size
+            if (socket->bytesAvailable() < static_cast<int>(sizeof(quint16)))
+            {
+                // Did not receive entire message size
+                return;
+            }
+            in >> connectedClients[socket].msgSize;
+        }
+        if (socket->bytesAvailable() < connectedClients[socket].msgSize)
+        {
             return;
         }
-        in >> connectedClients[socket].msgSize;
-    }
-    if (socket->bytesAvailable() < connectedClients[socket].msgSize)
-    {
-        return;
-    }
-    auto msg = Message();
-    in >> msg;
-    processMessage(msg, socket);
+        auto msg = Message();
+        in >> msg;
+        processMessage(msg, socket);
 
-    connectedClients[socket].msgSize = 0;
+        connectedClients[socket].msgSize = 0;
+    }
 }
 
 void Server::processMessage(const Message &message, QTcpSocket* source) noexcept
@@ -99,6 +101,7 @@ void Server::sendConnectedClientsList() noexcept
     broadcast(Message(Message::Type::Name, clientNames));
 }
 
+#include <Messages/timestamp.h>
 void Server::broadcast(const Message& message, QTcpSocket* source) noexcept
 {
     for (auto socket : connectedClients.keys())
@@ -106,6 +109,7 @@ void Server::broadcast(const Message& message, QTcpSocket* source) noexcept
         if (socket != source)
         {
             socket->write(message.toByteArray());
+            socket->flush();
         }
     }
 }
