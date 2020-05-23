@@ -4,6 +4,8 @@
 #include <QObject>
 #include <QTcpSocket>
 #include <QString>
+#include <QTime>
+
 #include <Messages/Messages>
 
 class Client : public QObject
@@ -38,6 +40,7 @@ class Client : public QObject
     QTcpSocket* socket = new QTcpSocket;
     quint16 msgSize = 0;
     QString name;
+    QTime timeSinceLastTimestampSent;
 
     void sendMessage(const Message& message) noexcept;
     void processMessage(const Message& message) noexcept;

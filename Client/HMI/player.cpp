@@ -1,13 +1,13 @@
 #include "player.h"
 #include "ui_player.h"
 
+#include <QMouseEvent>
+#include <QFileInfo>
+
 #include <VLCQtCore/Common.h>
 #include <VLCQtCore/Instance.h>
 #include <VLCQtCore/Media.h>
 #include <VLCQtCore/Enums.h>
-
-#include <QMouseEvent>
-#include <QFileInfo>
 
 #include "Network/client.h"
 
@@ -17,7 +17,7 @@ Player::Player(QWidget *parent) noexcept :
 {
     ui->setupUi(this);
     instance = new VlcInstance(VlcCommon::args(), this);
-    player = new CustomVlcMediaPlayer(instance);
+    player = new CustomSignalsMediaPlayer(instance);
     player->setVideoWidget(ui->video);
     ui->video->installEventFilter(this);
 
@@ -27,9 +27,8 @@ Player::Player(QWidget *parent) noexcept :
     ui->seek->setMediaPlayer(player);
 
     connect(ui->playPause, SIGNAL(clicked(bool)), this, SLOT(togglePause()));
-    connect(player, SIGNAL(timeManuallyChanged(int)), this, SLOT(sendTimestamp()));
-    connect(player, SIGNAL(paused()), this, SLOT(sendTimestamp()));
-    connect(player, SIGNAL(playing()), this, SLOT(sendTimestamp()));
+    connect(player, SIGNAL(manualActionTriggered()), this, SLOT(sendTimestamp()));
+    connect(player, SIGNAL(timeChanged(int)), this, SLOT(StopVideoIfEnded()));
 }
 
 Player::~Player() noexcept
@@ -43,12 +42,12 @@ Player::~Player() noexcept
 void Player::setClient(Client* client) noexcept
 {
     this->client = client;
-    connect(client, SIGNAL(timestampChanged(Timestamp)), this, SLOT(receiveStream(Timestamp)));
+    connect(client, SIGNAL(timestampChanged(Timestamp)), this, SLOT(receiveTimestamp(Timestamp)));
 }
 
 void Player::goForward() noexcept
 {
-    if (player->currentMedia() == nullptr)
+    if (player->videoIsOn() == false)
     {
         return;
     }
@@ -80,11 +79,11 @@ void Player::showUI() noexcept
 
 void Player::togglePause() noexcept
 {
-    if (player->currentMedia() == nullptr)
+    if (player->videoIsOn() == false)
     {
         return;
     }
-    if (player->state() == Vlc::Paused)
+    if (player->isPaused())
     {
         play();
     }
@@ -98,61 +97,75 @@ void Player::playFile(const QString& file) noexcept
 {
     media = new VlcMedia(file, true, instance);
     player->open(media);
-    play();
+    ui->playPause->setText("Pause");
     client->sendChat("<i>playing '" + QFileInfo(file).fileName() + "'.</i>");
 }
 
 void Player::sendTimestamp() noexcept
 {
-    auto timestamp = Timestamp(player->state() == Vlc::Paused, player->time());
+    auto timestamp = Timestamp(player->isPaused(), player->time());
     client->sendTimestamp(timestamp);
 }
 
-void Player::receiveStream(const Timestamp &timestamp) noexcept
+void Player::receiveTimestamp(const Timestamp &timestamp) noexcept
 {
     if (player->currentMedia() == nullptr)
     {
         return;
     }
-
-    player->setReceivedTime(timestamp.timeMS);
+    qDebug() << "Received timestamp" << player->time() << player->currentMedia()->duration();
+    player->noSignalSetTime(timestamp.timeMS);
 
     if (timestamp.paused)
     {
-        if (player->state() != Vlc::State::Paused)
-        {
-            pause();
-        }
+        pause(false);
     }
     else
     {
-        if (player->state() != Vlc::State::Playing)
-        {
-            play();
-        }
+        play(false);
     }
 }
 
-void Player::pause() noexcept
+void Player::pause(bool sendSignal) noexcept
 {
-    if (player->currentMedia() == nullptr || (player->state() != Vlc::State::Playing
-                                              && player->state() != Vlc::State::Paused))
+    if (player->currentMedia() == nullptr)
     {
         return;
     }
-    player->pause();
+    if (sendSignal)
+    {
+        player->pause();
+    }
+    else
+    {
+        player->noSignalPause();
+    }
     ui->playPause->setText("Play");
 }
 
-void Player::play() noexcept
+void Player::play(bool sendSignal) noexcept
 {
-    if (player->currentMedia() == nullptr || (player->state() != Vlc::State::Playing
-                                              && player->state() != Vlc::State::Paused))
+    if (player->videoIsOn() == false)
     {
         return;
     }
-    player->play();
+    if (sendSignal)
+    {
+        player->play();
+    }
+    else
+    {
+        player->noSignalPlay();
+    }
     ui->playPause->setText("Pause");
+}
+
+void Player::StopVideoIfEnded() noexcept
+{
+    if (player->videoIsOn() == false)
+    {
+        pause();
+    }
 }
 
 bool Player::eventFilter(QObject* object, QEvent* event) noexcept

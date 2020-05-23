@@ -30,7 +30,8 @@ SOURCES += \
     HMI/Helpers/uncloseabledock.cpp \
     HMI/networkdisplay.cpp \
     Network/client.cpp \
-    Logger/logger.cpp
+    Logger/logger.cpp \
+    HMI/Helpers/customsignalsmediaplayer.cpp
 
 HEADERS += \
     HMI/mainwindow.h \
@@ -38,7 +39,8 @@ HEADERS += \
     HMI/Helpers/uncloseabledock.h \
     HMI/networkdisplay.h \
     Network/client.h \
-    Logger/logger.h
+    Logger/logger.h \
+    HMI/Helpers/customsignalsmediaplayer.h
 
 FORMS += \
     HMI/player.ui \

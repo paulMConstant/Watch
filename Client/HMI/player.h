@@ -3,10 +3,9 @@
 
 #include <QWidget>
 
-#include <VLCQtCore/MediaPlayer.h>
-
-#include "Network/client.h"
 #include <Messages/Messages>
+#include "Network/client.h"
+#include "Helpers/customsignalsmediaplayer.h"
 
 class VlcInstance;
 class VlcMedia;
@@ -16,35 +15,7 @@ namespace Ui {
 class Player;
 }
 
-class CustomVlcMediaPlayer : public VlcMediaPlayer
-{
-    Q_OBJECT
-  public:
-    CustomVlcMediaPlayer(VlcInstance *instance) : VlcMediaPlayer(instance)
-    {
-    }
-    /*!
-     * \brief updates the time without sending a signal.
-     */
-    void setReceivedTime(int timeMS)
-    {
-        VlcMediaPlayer::setTime(timeMS);
-    }
 
-  signals:
-    void timeManuallyChanged(int);
-
-  public slots:
-    /*!
-     * \brief updates the time and sends a signal.
-     */
-    void setTime(int timeMS)
-    {
-        VlcMediaPlayer::setTime(timeMS);
-        emit timeManuallyChanged(timeMS);
-    }
-
-};
 
 class Player : public QWidget
 {
@@ -63,25 +34,26 @@ class Player : public QWidget
     void hideUI() noexcept;
     void togglePause() noexcept;
     void playFile(const QString& file) noexcept;
-    void receiveStream(const Timestamp& timestamp) noexcept;
+    void receiveTimestamp(const Timestamp& timestamp) noexcept;
 
   protected:
     bool eventFilter(QObject* object, QEvent* event) noexcept;
 
   private slots:
     void sendTimestamp() noexcept;
+    void StopVideoIfEnded() noexcept;
 
   private:
     Ui::Player* ui;
 
     VlcInstance* instance;
     VlcMedia* media;
-    CustomVlcMediaPlayer* player;
+    CustomSignalsMediaPlayer* player;
 
     Client* client;
 
-    void pause() noexcept;
-    void play() noexcept;
+    void pause(bool sendSignal = true) noexcept;
+    void play(bool sendSignal = true) noexcept;
 };
 
 #endif // PLAYER_H
