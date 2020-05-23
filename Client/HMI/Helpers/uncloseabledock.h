@@ -23,7 +23,6 @@ class UncloseableDock : public QDockWidget
 
     static constexpr auto timerCountMS {200};
     static constexpr auto countToShowTopMS {1400};
-    static constexpr auto topPortionOfWidget {35};
 
   private slots:
     void holdCount() noexcept;

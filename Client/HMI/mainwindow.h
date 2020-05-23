@@ -34,7 +34,6 @@ class MainWindow : public QMainWindow
     QTimer hideUITimer;
     static constexpr auto hideDelayMS {1500};
 
-    void initUI() noexcept;
     void initNetwork() noexcept;
     void initSlotConnections() noexcept;
 

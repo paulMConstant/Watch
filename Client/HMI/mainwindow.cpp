@@ -10,7 +10,7 @@ MainWindow::MainWindow(QWidget *parent) noexcept :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    initUI();
+    ui->setupUi(this);
     initNetwork();
     initSlotConnections();
 
@@ -119,13 +119,6 @@ void MainWindow::toggleFullscreen() noexcept
     }
 }
 
-void MainWindow::initUI() noexcept
-{
-    ui->setupUi(this);
-    ui->centralWidget->hide();
-    splitDockWidget(ui->networkDock, ui->playerDock, Qt::Horizontal);
-}
-
 void MainWindow::initNetwork() noexcept
 {
     ui->networkDisplay->setClient(&client);
@@ -135,17 +128,12 @@ void MainWindow::initNetwork() noexcept
 void MainWindow::initSlotConnections() noexcept
 {
     ui->actionShow_Network->setChecked(ui->networkDock->isVisible());
-    ui->actionShow_Player->setChecked(ui->playerDock->isVisible());
 
     connect(ui->actionShow_Network, SIGNAL(toggled(bool)),
             ui->networkDock, SLOT(setVisible(bool)));
-    connect(ui->actionShow_Player, SIGNAL(toggled(bool)),
-            ui->playerDock, SLOT(setVisible(bool)));
 
     connect(ui->networkDock, SIGNAL(visibilityChanged(bool)),
             ui->actionShow_Network, SLOT(setChecked(bool)));
-    connect(ui->playerDock, SIGNAL(visibilityChanged(bool)),
-            ui->actionShow_Player, SLOT(setChecked(bool)));
 
     connect(ui->actionFullscreen, SIGNAL(triggered(bool)),
             this, SLOT(toggleFullscreen()));

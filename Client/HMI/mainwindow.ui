@@ -13,7 +13,25 @@
   <property name="windowTitle">
    <string>Watch</string>
   </property>
-  <widget class="QWidget" name="centralWidget"/>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <item row="0" column="0">
+     <widget class="Player" name="player" native="true"/>
+    </item>
+   </layout>
+  </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
@@ -34,7 +52,6 @@
      <string>Window</string>
     </property>
     <addaction name="actionFullscreen"/>
-    <addaction name="actionShow_Player"/>
     <addaction name="actionShow_Network"/>
    </widget>
    <addaction name="menuFile"/>
@@ -57,33 +74,6 @@
      </property>
      <item>
       <widget class="NetworkDisplay" name="networkDisplay" native="true"/>
-     </item>
-    </layout>
-   </widget>
-  </widget>
-  <widget class="UncloseableDock" name="playerDock">
-   <property name="windowTitle">
-    <string>Player</string>
-   </property>
-   <attribute name="dockWidgetArea">
-    <number>1</number>
-   </attribute>
-   <widget class="QWidget" name="playerDockContents">
-    <layout class="QVBoxLayout" name="verticalLayout_2">
-     <property name="leftMargin">
-      <number>0</number>
-     </property>
-     <property name="topMargin">
-      <number>0</number>
-     </property>
-     <property name="rightMargin">
-      <number>0</number>
-     </property>
-     <property name="bottomMargin">
-      <number>0</number>
-     </property>
-     <item>
-      <widget class="Player" name="player" native="true"/>
      </item>
     </layout>
    </widget>

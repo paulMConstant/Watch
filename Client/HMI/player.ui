@@ -69,7 +69,14 @@
        </widget>
       </item>
       <item>
-       <widget class="VlcWidgetVolumeSlider" name="volume" native="true"/>
+       <widget class="VlcWidgetVolumeSlider" name="volume" native="true">
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>50</height>
+         </size>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
