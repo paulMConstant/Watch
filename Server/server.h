@@ -11,24 +11,14 @@
 class QTcpSocket;
 
 struct Client {
-    explicit Client(QTcpSocket* socket, const QString& name = "Unknown") noexcept:
-        socket(socket), name(name)
+    explicit Client(const QString& name = "Unknown") : name(name)
     {
     }
 
-    bool operator==(const Client& other) const
-    {
-        return other.socket == socket;
-    }
-
-    QTcpSocket* socket;
-    QString name;
+    QString name = "Unknown";
+    quint16 msgSize = 0;
 };
 
-inline uint qHash(Client client)
-{
-    return qHash(client.socket);
-}
 
 class Server : public QObject
 {
@@ -45,8 +35,7 @@ class Server : public QObject
 
   private:
     QTcpServer* server = new QTcpServer(this);
-    quint16 msgSize = 0;
-    QSet<Client> connectedClients;
+    QMap<QTcpSocket*, Client> connectedClients;
 
     void processMessage(const Message& message, QTcpSocket* source) noexcept;
     void registerClientName(const QString& name, QTcpSocket* source) noexcept;

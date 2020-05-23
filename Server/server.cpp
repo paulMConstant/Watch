@@ -36,31 +36,31 @@ void Server::newConnection() noexcept
 
 void Server::dataReceived() noexcept
 {
-    auto client = qobject_cast<QTcpSocket*>(sender());
-    if (client == nullptr)
+    auto socket = qobject_cast<QTcpSocket*>(sender());
+    if (socket == nullptr)
     {
         return;
     }
 
-    QDataStream in(client);
-    if (msgSize == 0)
+    QDataStream in(socket);
+    if (connectedClients[socket].msgSize == 0)
     {
-        if (client->bytesAvailable() < static_cast<int>(sizeof(quint16)))
+        if (socket->bytesAvailable() < static_cast<int>(sizeof(quint16)))
         {
             // Did not receive entire message size
             return;
         }
-        in >> msgSize;
+        in >> connectedClients[socket].msgSize;
     }
-    if (client->bytesAvailable() < msgSize)
+    if (socket->bytesAvailable() < connectedClients[socket].msgSize)
     {
         return;
     }
     auto msg = Message();
     in >> msg;
-    processMessage(msg, client);
+    processMessage(msg, socket);
 
-    msgSize = 0;
+    connectedClients[socket].msgSize = 0;
 }
 
 void Server::processMessage(const Message &message, QTcpSocket* source) noexcept
@@ -84,28 +84,27 @@ void Server::processMessage(const Message &message, QTcpSocket* source) noexcept
 void Server::registerClientName(const QString &name, QTcpSocket *source) noexcept
 {
     Logger::print("New client or name change : " + name);
-    connectedClients.remove(Client(source));
-
-    connectedClients << Client(source, name);
+    connectedClients[source] = Client(name);
     sendConnectedClientsList();
 }
 
 void Server::sendConnectedClientsList() noexcept
 {
     auto clientNames = QStringList();
-    std::transform(connectedClients.cbegin(), connectedClients.cend(),
-                  std::back_inserter(clientNames),
-                  [](const auto& client) { return client.name; });
+    for (const auto& client : connectedClients.values())
+    {
+        clientNames << client.name;
+    }
     broadcast(Message(Message::Type::Name, clientNames));
 }
 
 void Server::broadcast(const Message& message, QTcpSocket* source) noexcept
 {
-    for (auto& client : connectedClients)
+    for (auto socket : connectedClients.keys())
     {
-        if (client.socket != source)
+        if (socket != source)
         {
-            client.socket->write(message.toByteArray());
+            socket->write(message.toByteArray());
         }
     }
 }
@@ -117,15 +116,9 @@ void Server::clientDisconnected() noexcept
     {
         return;
     }
-    auto client = std::find_if(connectedClients.cbegin(), connectedClients.cend(),
-                               [socket](const auto& client)
-    { return client.socket == socket; });
-    if (client == connectedClients.cend())
-    {
-        return;
-    }
-    Logger::print(client->name + " disconnected.");
-    connectedClients.remove(*client);
+
+    Logger::print(connectedClients[socket].name + " disconnected.");
+    connectedClients.remove(socket);
     sendConnectedClientsList();
 
 }
