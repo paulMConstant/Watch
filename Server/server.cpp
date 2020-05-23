@@ -14,6 +14,7 @@ Server::Server() noexcept
     if (server->listen(QHostAddress::Any, Constants::port) == false)
     {
         Logger::print("Could not initialize server : " + server->errorString() + '.');
+        exit(1);
     }
     else
     {
