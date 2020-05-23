@@ -55,7 +55,7 @@ void Client::sendChat(QString chatMessage) noexcept
 
 void Client::sendTimestamp(const Timestamp& timestamp) noexcept
 {
-    constexpr auto minIntervalBetweenTimestamps = 20;
+    constexpr auto minIntervalBetweenTimestamps = 50;
     // Avoid timestamp message spam
     if (timeSinceLastTimestampSent.elapsed() > minIntervalBetweenTimestamps)
     {
