@@ -35,7 +35,7 @@ void NetworkDisplay::setClient(Client *client) noexcept
     this->client = client;
     connect(ui->connectButton, SIGNAL(clicked(bool)), this, SLOT(onConnectPressed()));
     connect(ui->IPline, SIGNAL(returnPressed()), this, SLOT(setFocus()));
-    connect(ui->nameLine, SIGNAL(textChanged(QString)), client, SLOT(setName(QString)));
+    connect(ui->nameLine, SIGNAL(editingFinished()), this, SLOT(changeName()));
     connect(ui->messageLine, SIGNAL(returnPressed()), this, SLOT(sendChatMessage()));
 
     connect(client, SIGNAL(connectionsChanged(QStringList)),
@@ -43,9 +43,16 @@ void NetworkDisplay::setClient(Client *client) noexcept
     connect(client, SIGNAL(disconnected()), this, SLOT(onDisconnected()));
     connect(client, SIGNAL(connected()), this, SLOT(onConnected()));
 
-    client->setName(ui->nameLine->text());
+    changeName();
 }
 
+void NetworkDisplay::changeName() noexcept
+{
+    auto name = ui->nameLine->text();
+    name = name.trimmed();
+    ui->nameLine->setText(name);
+    client->setName(name);
+}
 void NetworkDisplay::onDisconnected() noexcept
 {
     ui->connectedUsersList->clear();

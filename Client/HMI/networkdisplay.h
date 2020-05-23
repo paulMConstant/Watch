@@ -23,6 +23,7 @@ class NetworkDisplay : public QWidget
     bool eventFilter(QObject* object, QEvent* event) noexcept;
 
   private slots:
+    void changeName() noexcept;
     void onConnectPressed() noexcept;
     void updateConnectedUsersList(const QStringList& connectedUsers) noexcept;
     void sendChatMessage() noexcept;

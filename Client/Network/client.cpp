@@ -66,6 +66,10 @@ void Client::sendTimestamp(const Timestamp& timestamp) noexcept
 
 void Client::setName(const QString& name) noexcept
 {
+    if (name == this->name)
+    {
+        return;
+    }
     this->name = name;
     sendMessage(Message(Message::Type::Name, name));
 }
