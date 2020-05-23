@@ -12,7 +12,7 @@ NetworkDisplay::NetworkDisplay(QWidget *parent) noexcept:
 {
     ui->setupUi(this);
     Logger::init(ui->messageList);
-    connect(ui->IPline, SIGNAL(returnPressed()), SLOT(setFocus()));
+    connect(ui->serverLine, SIGNAL(returnPressed()), SLOT(setFocus()));
     connect(ui->nameLine, SIGNAL(returnPressed()), SLOT(setFocus()));
     qApp->installEventFilter(this);
 
@@ -21,12 +21,17 @@ NetworkDisplay::NetworkDisplay(QWidget *parent) noexcept:
     {
         ui->nameLine->setText(settings.value("Name").toString());
     }
+    if (settings.allKeys().contains("Server"))
+    {
+        ui->serverLine->setText(settings.value("Server").toString());
+    }
 }
 
 NetworkDisplay::~NetworkDisplay()
 {
     QSettings settings("Paul Constant", "Watch");
     settings.setValue("Name", ui->nameLine->text());
+    settings.setValue("Server", ui->serverLine->text());
     delete ui;
 }
 
@@ -34,7 +39,7 @@ void NetworkDisplay::setClient(Client *client) noexcept
 {
     this->client = client;
     connect(ui->connectButton, SIGNAL(clicked(bool)), this, SLOT(onConnectPressed()));
-    connect(ui->IPline, SIGNAL(returnPressed()), this, SLOT(setFocus()));
+    connect(ui->serverLine, SIGNAL(returnPressed()), this, SLOT(setFocus()));
     connect(ui->nameLine, SIGNAL(editingFinished()), this, SLOT(changeName()));
     connect(ui->messageLine, SIGNAL(returnPressed()), this, SLOT(sendChatMessage()));
 
@@ -56,8 +61,8 @@ void NetworkDisplay::changeName() noexcept
 void NetworkDisplay::onDisconnected() noexcept
 {
     ui->connectedUsersList->clear();
-    ui->IPline->setEnabled(true);
-    ui->IPlabel->setEnabled(true);
+    ui->serverLine->setEnabled(true);
+    ui->serverLabel->setEnabled(true);
     ui->nameLine->setEnabled(true);
     ui->nameLabel->setEnabled(true);
     ui->connectButton->setText("Connect");
@@ -65,8 +70,8 @@ void NetworkDisplay::onDisconnected() noexcept
 
 void NetworkDisplay::onConnected() noexcept
 {
-    ui->IPline->setEnabled(false);
-    ui->IPlabel->setEnabled(false);
+    ui->serverLine->setEnabled(false);
+    ui->serverLabel->setEnabled(false);
     ui->nameLine->setEnabled(false);
     ui->nameLabel->setEnabled(false);
     ui->connectButton->setText("Disconnect");
@@ -80,7 +85,7 @@ void NetworkDisplay::onConnectPressed() noexcept
     }
     else
     {
-        client->connectToServer(ui->IPline->text());
+        client->connectToServer(ui->serverLine->text());
     }
 }
 
@@ -139,9 +144,9 @@ bool NetworkDisplay::eventFilter(QObject* object, QEvent* event) noexcept
 {
     if (event->type() == QEvent::MouseButtonPress)
     {
-        if (ui->IPline->underMouse() == false)
+        if (ui->serverLine->underMouse() == false)
         {
-            ui->IPline->clearFocus();
+            ui->serverLine->clearFocus();
         }
         if (ui->nameLine->underMouse() == false)
         {

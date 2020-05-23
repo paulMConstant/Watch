@@ -180,7 +180,7 @@ bool Player::eventFilter(QObject* object, QEvent* event) noexcept
     if (event->type() == QEvent::MouseButtonPress)
     {
         auto mouseEvent = static_cast<QMouseEvent*>(event);
-        if (mouseEvent->button() == Qt::LeftButton)
+        if (mouseEvent->button() == Qt::LeftButton && hasMedia())
         {
             togglePause();
             return true;
