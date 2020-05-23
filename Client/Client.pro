@@ -27,20 +27,20 @@ SOURCES += \
     main.cpp \
     HMI/mainwindow.cpp \
     HMI/player.cpp \
-    HMI/Helpers/uncloseabledock.cpp \
     HMI/networkdisplay.cpp \
     Network/client.cpp \
     Logger/logger.cpp \
-    HMI/Helpers/customsignalsmediaplayer.cpp
+    HMI/Helpers/customsignalsmediaplayer.cpp \
+    HMI/Helpers/discreetdock.cpp
 
 HEADERS += \
     HMI/mainwindow.h \
     HMI/player.h \
-    HMI/Helpers/uncloseabledock.h \
     HMI/networkdisplay.h \
     Network/client.h \
     Logger/logger.h \
-    HMI/Helpers/customsignalsmediaplayer.h
+    HMI/Helpers/customsignalsmediaplayer.h \
+    HMI/Helpers/discreetdock.h
 
 FORMS += \
     HMI/player.ui \

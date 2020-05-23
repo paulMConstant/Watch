@@ -56,7 +56,7 @@
    <addaction name="menuFile"/>
    <addaction name="menuWindow"/>
   </widget>
-  <widget class="UncloseableDock" name="networkDock">
+  <widget class="DiscreetDock" name="networkDock">
    <property name="features">
     <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
    </property>
@@ -99,22 +99,6 @@
     <string>F11</string>
    </property>
   </action>
-  <action name="actionShow_Player">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Show Player</string>
-   </property>
-  </action>
-  <action name="actionShow_Network">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Show Network</string>
-   </property>
-  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -130,9 +114,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>UncloseableDock</class>
+   <class>DiscreetDock</class>
    <extends>QDockWidget</extends>
-   <header>HMI/Helpers/uncloseabledock.h</header>
+   <header>HMI/Helpers/discreetdock.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

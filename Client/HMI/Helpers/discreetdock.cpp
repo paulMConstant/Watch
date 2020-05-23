@@ -1,6 +1,6 @@
-#include "HMI/Helpers/uncloseabledock.h"
+#include "HMI/Helpers/discreetdock.h"
 
-UncloseableDock::UncloseableDock(QWidget* parent) noexcept : QDockWidget(parent)
+DiscreetDock::DiscreetDock(QWidget* parent) noexcept : QDockWidget(parent)
 {
     setTitleBarWidget(new QWidget(this));
     timer.setInterval(timerCountMS);
@@ -14,14 +14,14 @@ UncloseableDock::UncloseableDock(QWidget* parent) noexcept : QDockWidget(parent)
     });
 }
 
-void UncloseableDock::closeEvent(QCloseEvent* event)
+void DiscreetDock::closeEvent(QCloseEvent* event)
 {
     event->ignore();
     hide();
     setTitleBarWidget(new QWidget(this));
 }
 
-void UncloseableDock::enterEvent(QEvent* event)
+void DiscreetDock::enterEvent(QEvent* event)
 {
     event->ignore();
     if (isFloating())
@@ -33,7 +33,7 @@ void UncloseableDock::enterEvent(QEvent* event)
     mouseHoldCount = 0;
 }
 
-void UncloseableDock::leaveEvent(QEvent* event)
+void DiscreetDock::leaveEvent(QEvent* event)
 {
     event->ignore();
     if (isFloating())
@@ -45,7 +45,7 @@ void UncloseableDock::leaveEvent(QEvent* event)
     setTitleBarWidget(new QWidget(this));
 }
 
-void UncloseableDock::holdCount() noexcept
+void DiscreetDock::holdCount() noexcept
 {
     constexpr auto nbCountToShowTop {countToShowTopMS / timerCountMS};
     constexpr auto topPortionOfWidget {35};

@@ -5,12 +5,12 @@
 #include <QCloseEvent>
 #include <QTimer>
 
-class UncloseableDock : public QDockWidget
+class DiscreetDock : public QDockWidget
 {
     Q_OBJECT
-    Q_DISABLE_COPY(UncloseableDock)
+    Q_DISABLE_COPY(DiscreetDock)
   public:
-    explicit UncloseableDock(QWidget* parent = nullptr) noexcept;
+    explicit DiscreetDock(QWidget* parent = nullptr) noexcept;
 
   protected:
     void closeEvent(QCloseEvent* event);
