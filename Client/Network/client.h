@@ -4,9 +4,6 @@
 #include <QObject>
 #include <QTcpSocket>
 #include <QString>
-#include <QTimer>
-
-#include <optional>
 
 #include <Messages/timestamp.h>
 #include <Messages/message.h>
@@ -38,20 +35,14 @@ class Client : public QObject
     void onDisconnected() noexcept;
     void socketError() noexcept;
     void dataReceived() noexcept;
-    void sendLastUnsentTimestamp() noexcept;
 
   private:
     QTcpSocket* socket = new QTcpSocket;
     quint16 msgSize = 0;
     QString name;
-    QTimer lastTimestampSentTimer;
-    std::optional<Timestamp> lastUnsentTimestamp;
 
     void sendMessage(const Message& message) noexcept;
     void processMessage(const Message& message) noexcept;
-
-    static constexpr auto minIntervalBetweenTimestamps = 50;
-
 };
 
 #endif // CLIENT_H

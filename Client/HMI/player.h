@@ -54,6 +54,8 @@ class Player : public QWidget
 
     void pause(bool sendSignal = true) noexcept;
     void play(bool sendSignal = true) noexcept;
+
+    static constexpr auto timeJumpMS = 3000;
 };
 
 #endif // PLAYER_H

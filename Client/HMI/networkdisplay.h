@@ -35,7 +35,7 @@ class NetworkDisplay : public QWidget
     Client* client;
     QStringList lastConnectedUsers;
 
-    void explicitUserListChanges(const QStringList& newConnectedUsers) noexcept;
+    void printUserListChanges(const QStringList& newConnectedUsers) noexcept;
 };
 
 #endif // NETWORKDISPLAY_H

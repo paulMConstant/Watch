@@ -5,6 +5,7 @@
 CustomSignalsMediaPlayer::CustomSignalsMediaPlayer(VlcInstance *instance) :
     VlcMediaPlayer(instance)
 {
+    lastTimeSetTime.start();
 }
 
 bool CustomSignalsMediaPlayer::isPaused() const noexcept
@@ -25,7 +26,12 @@ bool CustomSignalsMediaPlayer::timeIsPlayable(int timeMS) const noexcept
 
 void CustomSignalsMediaPlayer::noSignalSetTime(int timeMS)
 {
-    VlcMediaPlayer::setTime(timeMS);
+    constexpr auto minSetTimeIntervalMS = 50;
+    if (lastTimeSetTime.elapsed() > minSetTimeIntervalMS)
+    {
+        VlcMediaPlayer::setTime(timeMS);
+        lastTimeSetTime.start();
+    }
 }
 
 void CustomSignalsMediaPlayer::noSignalPlay()

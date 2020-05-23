@@ -56,17 +56,19 @@ void Player::goForward() noexcept
     {
         return;
     }
-    if (player->currentMedia()->duration() - player->time() > 4000)
+    constexpr auto securityMarginMS = 1000;
+    const auto timeLeft = player->currentMedia()->duration() - player->time();
+    if (timeLeft > timeJumpMS + securityMarginMS)
     {
-        player->setTime(player->time() + 2000);
+        player->setTime(player->time() + timeJumpMS);
     }
 }
 
 void Player::goBack() noexcept
 {
-    if (player->time() > 2000)
+    if (player->time() > timeJumpMS)
     {
-        player->setTime(player->time() - 2000);
+        player->setTime(player->time() - timeJumpMS);
     }
 }
 

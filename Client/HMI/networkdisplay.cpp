@@ -93,7 +93,7 @@ void NetworkDisplay::updateConnectedUsersList(const QStringList& connectedUsers)
     }
     else
     {
-        explicitUserListChanges(connectedUsers);
+        printUserListChanges(connectedUsers);
     }
 
     ui->connectedUsersList->clear();
@@ -103,7 +103,7 @@ void NetworkDisplay::updateConnectedUsersList(const QStringList& connectedUsers)
     }
 }
 
-void NetworkDisplay::explicitUserListChanges(const QStringList& newConnectedUsers) noexcept
+void NetworkDisplay::printUserListChanges(const QStringList& newConnectedUsers) noexcept
 {
     for (const auto& user : newConnectedUsers)
     {
