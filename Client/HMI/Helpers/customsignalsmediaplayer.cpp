@@ -26,12 +26,7 @@ bool CustomSignalsMediaPlayer::timeIsPlayable(int timeMS) const noexcept
 
 void CustomSignalsMediaPlayer::noSignalSetTime(int timeMS)
 {
-    constexpr auto minSetTimeIntervalMS = 50;
-    if (lastTimeSetTime.elapsed() > minSetTimeIntervalMS)
-    {
-        VlcMediaPlayer::setTime(timeMS);
-        lastTimeSetTime.start();
-    }
+    VlcMediaPlayer::setTime(timeMS);
 }
 
 void CustomSignalsMediaPlayer::noSignalPlay()
@@ -48,9 +43,12 @@ void CustomSignalsMediaPlayer::noSignalPause()
 
 void CustomSignalsMediaPlayer::setTime(int timeMS)
 {
-    if (timeIsPlayable(timeMS))
+    // Avoid sending too much data at once to server
+    constexpr auto minSetTimeIntervalMS = 50;
+    if (lastTimeSetTime.elapsed() > minSetTimeIntervalMS && timeIsPlayable(timeMS))
     {
         noSignalSetTime(timeMS);
+        lastTimeSetTime.start();
         emit manualActionTriggered();
     }
 }
