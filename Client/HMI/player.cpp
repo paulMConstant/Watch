@@ -113,7 +113,7 @@ void Player::receiveTimestamp(const Timestamp &timestamp) noexcept
     {
         return;
     }
-    qDebug() << "Received timestamp" << player->time() << player->currentMedia()->duration();
+
     player->noSignalSetTime(timestamp.timeMS);
 
     if (timestamp.paused)

@@ -1,7 +1,6 @@
 #include "networkdisplay.h"
 #include "ui_networkdisplay.h"
 
-#include <QDebug>
 #include <QSettings>
 
 #include "Network/client.h"
@@ -83,7 +82,6 @@ void NetworkDisplay::updateConnectedUsersList(const QStringList& connectedUsers)
     }
 }
 
-#include <QDebug>
 void NetworkDisplay::sendChatMessage() noexcept
 {
     auto text = ui->messageLine->text();
