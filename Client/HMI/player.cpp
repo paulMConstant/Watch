@@ -34,9 +34,14 @@ Player::Player(QWidget *parent) noexcept :
 Player::~Player() noexcept
 {
     delete player;
-    delete instance;
     delete media;
+    delete instance;
     delete ui;
+}
+
+bool Player::hasMedia() const noexcept
+{
+    return player->currentMedia() != nullptr;
 }
 
 void Player::setClient(Client* client) noexcept
@@ -47,7 +52,7 @@ void Player::setClient(Client* client) noexcept
 
 void Player::goForward() noexcept
 {
-    if (player->videoIsOn() == false)
+    if (player->videoIsPlayable() == false)
     {
         return;
     }
@@ -79,7 +84,7 @@ void Player::showUI() noexcept
 
 void Player::togglePause() noexcept
 {
-    if (player->videoIsOn() == false)
+    if (player->videoIsPlayable() == false)
     {
         return;
     }
@@ -109,7 +114,7 @@ void Player::sendTimestamp() noexcept
 
 void Player::receiveTimestamp(const Timestamp &timestamp) noexcept
 {
-    if (player->currentMedia() == nullptr)
+    if (hasMedia() == false)
     {
         return;
     }
@@ -128,7 +133,7 @@ void Player::receiveTimestamp(const Timestamp &timestamp) noexcept
 
 void Player::pause(bool sendSignal) noexcept
 {
-    if (player->currentMedia() == nullptr)
+    if (hasMedia() == false)
     {
         return;
     }
@@ -145,7 +150,7 @@ void Player::pause(bool sendSignal) noexcept
 
 void Player::play(bool sendSignal) noexcept
 {
-    if (player->videoIsOn() == false)
+    if (player->videoIsPlayable() == false)
     {
         return;
     }
@@ -162,7 +167,7 @@ void Player::play(bool sendSignal) noexcept
 
 void Player::StopVideoIfEnded() noexcept
 {
-    if (player->videoIsOn() == false)
+    if (player->videoIsPlayable() == false)
     {
         pause();
     }

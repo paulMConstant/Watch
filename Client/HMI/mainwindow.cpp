@@ -97,6 +97,10 @@ void MainWindow::showUI() noexcept
 
 void MainWindow::hideUI() noexcept
 {
+    if (ui->player->hasMedia() == false)
+    {
+        return;
+    }
     ui->menuBar->hide();
     if (ui->networkDock->isFloating() == false)
     {

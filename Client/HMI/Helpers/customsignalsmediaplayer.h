@@ -22,7 +22,7 @@ class CustomSignalsMediaPlayer : public VlcMediaPlayer
     /*!
      * \brief utility method which returns true if a video is loaded and not about to end.
      */
-    [[nodiscard]] bool videoIsOn() const noexcept;
+    [[nodiscard]] bool videoIsPlayable() const noexcept;
 
     /*!
      * \brief updates the time without sending a signal.

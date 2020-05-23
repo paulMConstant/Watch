@@ -25,6 +25,8 @@ class Player : public QWidget
     explicit Player(QWidget *parent = nullptr) noexcept;
     ~Player() noexcept;
 
+    [[nodiscard]] bool hasMedia() const noexcept;
+
     void setClient(Client* client) noexcept;
     void goForward() noexcept;
     void goBack() noexcept;
