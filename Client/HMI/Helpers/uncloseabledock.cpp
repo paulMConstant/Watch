@@ -47,6 +47,9 @@ void UncloseableDock::leaveEvent(QEvent* event)
 
 void UncloseableDock::holdCount() noexcept
 {
+    constexpr auto nbCountToShowTop {countToShowTopMS / timerCountMS};
+    constexpr auto topPortionOfWidget {35};
+
     const auto cursorPos {mapFromGlobal(QCursor::pos())};
     if (cursorPos.y() < topPortionOfWidget
             && cursorPos.x() >= 0

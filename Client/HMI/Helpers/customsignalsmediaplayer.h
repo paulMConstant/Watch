@@ -20,7 +20,7 @@ class CustomSignalsMediaPlayer : public VlcMediaPlayer
     [[nodiscard]] bool isPaused() const noexcept;
 
     /*!
-     * \brief utility method which returns true if a video is loaded.
+     * \brief utility method which returns true if a video is loaded and not about to end.
      */
     [[nodiscard]] bool videoIsOn() const noexcept;
 
