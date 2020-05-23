@@ -86,11 +86,41 @@ void NetworkDisplay::onConnectPressed() noexcept
 
 void NetworkDisplay::updateConnectedUsersList(const QStringList& connectedUsers) noexcept
 {
+    if (ui->connectedUsersList->count() == 0)
+    {
+        // We just joined the room
+        lastConnectedUsers = connectedUsers;
+    }
+    else
+    {
+        explicitUserListChanges(connectedUsers);
+    }
+
     ui->connectedUsersList->clear();
     for (const auto& user : connectedUsers)
     {
         ui->connectedUsersList->addItem(user);
     }
+}
+
+void NetworkDisplay::explicitUserListChanges(const QStringList& newConnectedUsers) noexcept
+{
+    for (const auto& user : newConnectedUsers)
+    {
+        if (lastConnectedUsers.contains(user) == false)
+        {
+            Logger::printChatMsg("<i>" + user + " joined the room.</i>");
+        }
+        else
+        {
+            lastConnectedUsers.removeOne(user);
+        }
+    }
+    for (const auto& user : lastConnectedUsers)
+    {
+        Logger::printChatMsg("<i>" + user + " left.</i>");
+    }
+    lastConnectedUsers = newConnectedUsers;
 }
 
 void NetworkDisplay::sendChatMessage() noexcept

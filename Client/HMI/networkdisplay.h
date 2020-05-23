@@ -33,8 +33,9 @@ class NetworkDisplay : public QWidget
   private:
     Ui::NetworkDisplay *ui;
     Client* client;
+    QStringList lastConnectedUsers;
 
-    void fillMyIP();
+    void explicitUserListChanges(const QStringList& newConnectedUsers) noexcept;
 };
 
 #endif // NETWORKDISPLAY_H
