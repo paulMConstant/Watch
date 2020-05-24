@@ -11,4 +11,8 @@ SUBDIRS = \
         Client \
         Server
 
+Messages.subdir = src/Messages
+Client.subdir   = src/Client
+Server.subdir   = src/Server
+
 app.depends = Messages

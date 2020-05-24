@@ -24,5 +24,5 @@ HEADERS += \
     server.h \
     Logger/logger.h
 
-LIBS += -L$$PWD/../../build-Watch-Desktop-Release/Messages -lMessages
+LIBS += -L$$PWD/../../../build-Watch-Desktop-Release/src/Messages -lMessages
 INCLUDEPATH += $$PWD/../
