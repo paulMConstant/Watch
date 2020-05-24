@@ -76,6 +76,7 @@ void Server::processMessage(const Message &message, QTcpSocket* source) noexcept
 
     case Message::Type::Timestamp:
     case Message::Type::Chat:
+    case Message::Type::URL:
         broadcast(message, source);
         break;
 
@@ -101,7 +102,6 @@ void Server::sendConnectedClientsList() noexcept
     broadcast(Message(Message::Type::Name, clientNames));
 }
 
-#include <Messages/timestamp.h>
 void Server::broadcast(const Message& message, QTcpSocket* source) noexcept
 {
     for (auto socket : connectedClients.keys())

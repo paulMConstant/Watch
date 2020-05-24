@@ -19,6 +19,7 @@ class Player : public QWidget
 {
     Q_OBJECT
     Q_DISABLE_COPY(Player)
+
   public:
     explicit Player(QWidget *parent = nullptr) noexcept;
     ~Player() noexcept;
@@ -33,7 +34,10 @@ class Player : public QWidget
     void showUI() noexcept;
     void hideUI() noexcept;
     void togglePause() noexcept;
-    void playFile(const QString& file) noexcept;
+    void askOpenFile() noexcept;
+    void askOpenURL() noexcept;
+    void playFile(const QString& file, bool local = false) noexcept;
+    void shareCurrentMedia() noexcept;
     void receiveTimestamp(const Timestamp& timestamp) noexcept;
 
   protected:
@@ -51,6 +55,8 @@ class Player : public QWidget
     CustomSignalsMediaPlayer* player;
 
     Client* client;
+
+    QString currentFile;
 
     void pause(bool sendSignal = true) noexcept;
     void play(bool sendSignal = true) noexcept;

@@ -45,7 +45,9 @@
     <property name="title">
      <string>File</string>
     </property>
-    <addaction name="actionOpen"/>
+    <addaction name="actionOpen_local"/>
+    <addaction name="actionOpen_url"/>
+    <addaction name="actionShare_current"/>
    </widget>
    <widget class="QMenu" name="menuWindow">
     <property name="title">
@@ -86,9 +88,9 @@
     </layout>
    </widget>
   </widget>
-  <action name="actionOpen">
+  <action name="actionOpen_local">
    <property name="text">
-    <string>Open...</string>
+    <string>Open local file...</string>
    </property>
   </action>
   <action name="actionFullscreen">
@@ -97,6 +99,16 @@
    </property>
    <property name="shortcut">
     <string>F11</string>
+   </property>
+  </action>
+  <action name="actionOpen_url">
+   <property name="text">
+    <string>Open url...</string>
+   </property>
+  </action>
+  <action name="actionShare_current">
+   <property name="text">
+    <string>Share current media</string>
    </property>
   </action>
  </widget>

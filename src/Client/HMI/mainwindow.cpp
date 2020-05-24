@@ -1,6 +1,5 @@
 #include "HMI/mainwindow.h"
 #include <QKeyEvent>
-#include <QFileDialog>
 #include <QLineEdit>
 
 #include "ui_mainwindow.h"
@@ -135,16 +134,7 @@ void MainWindow::initSlotConnections() noexcept
             this, SLOT(toggleFullscreen()));
 
     connect(&hideUITimer, SIGNAL(timeout()), this, SLOT(hideUI()));
-    connect(ui->actionOpen, &QAction::triggered,
-            [this]()
-    {
-        QString file = QFileDialog::getOpenFileName(this, tr("Open file"),
-                                                    QDir::homePath(),
-                                                    tr("Multimedia files(*)"));
-
-        if (file.isEmpty())
-            return;
-
-        ui->player->playFile(file);
-    });
+    connect(ui->actionOpen_local, SIGNAL(triggered(bool)), ui->player, SLOT(askOpenFile()));
+    connect(ui->actionOpen_url, SIGNAL(triggered(bool)), ui->player, SLOT(askOpenURL()));
+    connect(ui->actionShare_current, SIGNAL(triggered(bool)), ui->player, SLOT(shareCurrentMedia()));
 }

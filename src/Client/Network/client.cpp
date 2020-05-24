@@ -57,6 +57,24 @@ void Client::sendTimestamp(const Timestamp& timestamp) noexcept
     sendMessage(Message(Message::Type::Timestamp, QVariant::fromValue<Timestamp>(timestamp)));
 }
 
+void Client::sendURL(const QString& URL) noexcept
+{
+    if (isConnectedToServer())
+    {
+        sendMessage(Message(Message::Type::URL, URL));
+        Logger::printInfo("Shared current media.");
+    }
+    else
+    {
+        Logger::printError("Cannot share current media : you are not connected to the server.");
+    }
+}
+
+void Client::sendName() noexcept
+{
+    sendMessage(Message(Message::Type::Name, name));
+}
+
 void Client::setName(const QString& name) noexcept
 {
     if (name == this->name)
@@ -64,12 +82,12 @@ void Client::setName(const QString& name) noexcept
         return;
     }
     this->name = name;
-    sendMessage(Message(Message::Type::Name, name));
+    sendName();
 }
 
 void Client::onConnected() noexcept
 {
-    sendMessage(Message(Message::Type::Name, name));
+    sendName();
     Logger::printInfo("Connection succesful");
     emit connected();
 }
@@ -134,6 +152,11 @@ void Client::processMessage(const Message& message) noexcept
 
     case Message::Type::Chat:
         Logger::printChatMsg(message.data.toString());
+        break;
+
+    case Message::Type::URL:
+        Logger::printChatMsg("J'ai reçu un URL");
+        emit urlChanged(message.data.toString());
         break;
 
     default:

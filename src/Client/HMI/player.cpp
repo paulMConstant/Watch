@@ -3,6 +3,8 @@
 
 #include <QMouseEvent>
 #include <QFileInfo>
+#include <QFileDialog>
+#include <QInputDialog>
 
 #include <VLCQtCore/Common.h>
 #include <VLCQtCore/Instance.h>
@@ -10,6 +12,7 @@
 #include <VLCQtCore/Enums.h>
 
 #include "Network/client.h"
+#include "Logger/logger.h"
 
 Player::Player(QWidget *parent) noexcept :
     QWidget(parent),
@@ -48,6 +51,7 @@ void Player::setClient(Client* client) noexcept
 {
     this->client = client;
     connect(client, SIGNAL(timestampChanged(Timestamp)), this, SLOT(receiveTimestamp(Timestamp)));
+    connect(client, SIGNAL(urlChanged(QString)), this, SLOT(playFile(QString)));
 }
 
 void Player::goForward() noexcept
@@ -70,6 +74,39 @@ void Player::goBack() noexcept
     {
         player->setTime(player->time() - timeJumpMS);
     }
+}
+
+void Player::askOpenFile() noexcept
+{
+    QString file = QFileDialog::getOpenFileName(this, tr("Open file"),
+                                                QDir::homePath(),
+                                                tr("Multimedia files(*)"));
+
+    if (file.isEmpty())
+        return;
+
+    playFile(file, true);
+}
+
+void Player::askOpenURL() noexcept
+{
+    QString url =
+            QInputDialog::getText(this, tr("Open Url"), tr("Enter the URL you want to play"));
+
+    if (url.isEmpty())
+        return;
+
+    playFile(url, false);
+}
+
+void Player::shareCurrentMedia() noexcept
+{
+    if (player->currentMedia() == nullptr)
+    {
+        Logger::printError("Cannot share media : no open media.");
+        return;
+    }
+    client->sendURL(currentFile);
 }
 
 void Player::hideUI() noexcept
@@ -100,12 +137,20 @@ void Player::togglePause() noexcept
     }
 }
 
-void Player::playFile(const QString& file) noexcept
+void Player::playFile(const QString& file, bool local) noexcept
 {
-    media = new VlcMedia(file, true, instance);
+    media = new VlcMedia(file, local, instance);
     player->open(media);
     ui->playPause->setText("Pause");
-    client->sendChat("<i>playing '" + QFileInfo(file).fileName() + "'.</i>");
+    if (local)
+    {
+        currentFile= QFileInfo(file).fileName();
+    }
+    else
+    {
+        currentFile = file;
+    }
+    client->sendChat("<i>playing '" + currentFile + "'.</i>");
 }
 
 void Player::sendTimestamp() noexcept
