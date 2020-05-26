@@ -46,7 +46,7 @@ class Player : public QWidget
 
   private slots:
     void sendTimestamp() noexcept;
-    void StopVideoIfEnded() noexcept;
+    void stopVideoIfEnded() noexcept;
 
   private:
     Ui::Player* ui;
