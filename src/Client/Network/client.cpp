@@ -46,17 +46,23 @@ void Client::disconnectFromServer() noexcept
     socket->disconnectFromHost();
 }
 
-void Client::sendChat(QString chatMessage) noexcept
-{
-    auto htmlName = Helpers::String::cleanHtml(name);
-    chatMessage = "<b>" + htmlName + " :</b> " + chatMessage;
-    Logger::printChatMsg(chatMessage);
-    sendMessage(Message(Message::Type::Chat, chatMessage));
-}
-
 void Client::sendTimestamp(const Timestamp& timestamp) noexcept
 {
     sendMessage(Message(Message::Type::Timestamp, QVariant::fromValue<Timestamp>(timestamp)));
+}
+
+void Client::sendChat(QString chatMessage) noexcept
+{
+    chatMessage = namedMessage(chatMessage);
+    Logger::printBlack(chatMessage);
+    sendMessage(Message(Message::Type::Chat, chatMessage));
+}
+
+void Client::sendInfo(QString info) noexcept
+{
+    info = "<i>" + info + "</i>";
+    info = namedMessage(info);
+    sendMessage(Message(Message::Type::Info, info));
 }
 
 void Client::sendURL(const QString& URL) noexcept
@@ -64,11 +70,11 @@ void Client::sendURL(const QString& URL) noexcept
     if (isConnectedToServer())
     {
         sendMessage(Message(Message::Type::URL, URL));
-        Logger::printInfo("Shared current media.");
+        Logger::printGreen("Shared current media.");
     }
     else
     {
-        Logger::printError("Cannot share current media : you are not connected to the server.");
+        Logger::printRed("Cannot share current media : you are not connected to the server.");
     }
 }
 
@@ -90,7 +96,7 @@ void Client::setName(const QString& name) noexcept
 void Client::onConnected() noexcept
 {
     sendName();
-    Logger::printInfo("Connection succesful");
+    Logger::printGreen("Connection succesful");
     emit connected();
 }
 
@@ -105,13 +111,13 @@ void Client::sendMessage(const Message& message) noexcept
 
 void Client::onDisconnected() noexcept
 {
-    Logger::printInfo("Disconnected.");
+    Logger::printGreen("Disconnected.");
     emit disconnected();
 }
 
 void Client::socketError() noexcept
 {
-    Logger::printError("Socket error : " + socket->errorString());
+    Logger::printRed("Socket error : " + socket->errorString());
 }
 
 void Client::sslError(QList<QSslError> errors) noexcept
@@ -122,7 +128,7 @@ void Client::sslError(QList<QSslError> errors) noexcept
         return;
     }
     auto error = errors.takeFirst();
-    Logger::printError("Ssl error : " + error.errorString());
+    Logger::printRed("Ssl error : " + error.errorString());
 }
 
 void Client::dataReceived() noexcept
@@ -164,7 +170,9 @@ void Client::processMessage(const Message& message) noexcept
             break;
 
         case Message::Type::Chat:
-            Logger::printChatMsg(message.data.toString());
+            // TODO play chat message sound
+        case Message::Type::Info:
+            Logger::printBlack(message.data.toString());
             break;
 
         case Message::Type::URL:
@@ -172,6 +180,13 @@ void Client::processMessage(const Message& message) noexcept
             break;
 
         default:
-            Logger::printError("Received invalid message...");
+            Logger::printRed("Received invalid message...");
     }
+}
+
+QString Client::namedMessage(QString msg) noexcept
+{
+    auto htmlName = Helpers::String::cleanHtml(name);
+    msg = "<b>" + htmlName + " :</b> " + msg;
+    return msg;
 }

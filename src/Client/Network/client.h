@@ -47,7 +47,7 @@ class Client : public QObject
     quint16 msgSize = 0;
     QString name;
 
-    QString cleanHtmlString(QString str) noexcept;
+    QString namedMessage(QString msg) noexcept;
     void sendName() noexcept;
     void sendMessage(const Message& message) noexcept;
     void processMessage(const Message& message) noexcept;

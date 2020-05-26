@@ -109,13 +109,13 @@ void Player::shareCurrentMedia() noexcept
 {
     if (player->currentMedia() == nullptr)
     {
-        Logger::printError("Cannot share media : no open media.");
+        Logger::printRed("Cannot share media : no open media.");
         return;
     }
 
     if (currentFileIsLocal())
     {
-        Logger::printError("Sharing of local files is not yet implemented.");
+        Logger::printRed("Sharing of local files is not yet implemented.");
         return;
     }
     client->sendURL(currentFile);
@@ -161,8 +161,7 @@ void Player::playFile(const QString& file) noexcept
     {
         filename = QFileInfo(currentFile).fileName();
     }
-    // TODO replace with sendInfo()
-    client->sendChat("<i>playing '" + filename + "'.</i>");
+    client->sendInfo("playing '" + filename + "'.");
 }
 
 bool Player::currentFileIsLocal() noexcept

@@ -115,7 +115,7 @@ void NetworkDisplay::printUserListChanges(const QStringList& newConnectedUsers) 
     {
         if (lastConnectedUsers.contains(user) == false)
         {
-            Logger::printChatMsg("<i>" + user + " joined the room.</i>");
+            Logger::printBlack("<i>" + user + " joined the room.</i>");
         }
         else
         {
@@ -124,7 +124,7 @@ void NetworkDisplay::printUserListChanges(const QStringList& newConnectedUsers) 
     }
     for (const auto& user : lastConnectedUsers)
     {
-        Logger::printChatMsg("<i>" + user + " left.</i>");
+        Logger::printBlack("<i>" + user + " left.</i>");
     }
     lastConnectedUsers = newConnectedUsers;
 }

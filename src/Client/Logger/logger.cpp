@@ -25,17 +25,17 @@ void Logger::init(QTextEdit* outputList) noexcept
     msgList = outputList;
 }
 
-void Logger::printError(const QString& msg) noexcept
+void Logger::printRed(const QString& msg) noexcept
 {
     print(msg, Qt::red);
 }
 
-void Logger::printInfo(const QString& msg) noexcept
+void Logger::printGreen(const QString& msg) noexcept
 {
     print(msg, Qt::darkGreen);
 }
 
-void Logger::printChatMsg(const QString& msg) noexcept
+void Logger::printBlack(const QString& msg) noexcept
 {
     print(msg, Qt::black);
 }
