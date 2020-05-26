@@ -3,16 +3,20 @@
 #include <QByteArray>
 #include <QDataStream>
 #include <QHostAddress>
-#include <QTcpSocket>
+#include <QSslSocket>
+#include <QSslKey>
+#include <QSslCertificate>
 
 #include <Messages/constants.h>
 #include "Logger/logger.h"
 
 Client::Client() noexcept
 {
+    socket->addCaCertificates(":/server_cert");
     connect(socket, SIGNAL(connected()), this, SLOT(onConnected()));
     connect(socket, SIGNAL(disconnected()), this, SLOT(onDisconnected()));
     connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(socketError()));
+    connect(socket, SIGNAL(sslErrors(QList<QSslError>)), this, SLOT(sslError(QList<QSslError>)));
     connect(socket, SIGNAL(readyRead()), this, SLOT(dataReceived()));
 }
 
@@ -24,7 +28,7 @@ Client::~Client() noexcept
 
 bool Client::isConnectedToServer() const noexcept
 {
-    return (socket->state() == QTcpSocket::ConnectedState);
+    return (socket->state() == QSslSocket::ConnectedState);
 }
 
 void Client::connectToServer(const QString& IP) noexcept
@@ -33,8 +37,7 @@ void Client::connectToServer(const QString& IP) noexcept
     {
         disconnectFromServer();
     }
-
-    socket->connectToHost(IP, Constants::port);
+    socket->connectToHostEncrypted(IP, Constants::port);
 }
 
 void Client::disconnectFromServer() noexcept
@@ -110,6 +113,17 @@ void Client::onDisconnected() noexcept
 void Client::socketError() noexcept
 {
     Logger::printError("Socket error : " + socket->errorString());
+}
+
+void Client::sslError(QList<QSslError> errors) noexcept
+{
+    disconnectFromServer();
+    if (errors.empty())
+    {
+        return;
+    }
+    auto error = errors.takeFirst();
+    Logger::printError("Ssl error : " + error.errorString());
 }
 
 void Client::dataReceived() noexcept

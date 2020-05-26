@@ -58,3 +58,6 @@ unix:{
     QMAKE_LFLAGS += "-Wl,-rpath,\'\$$ORIGIN\'"
 }
 
+RESOURCES += \
+    Resources/resources.qrc
+

@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="server_cert">../../../certs/server_cert.pem</file>
+    </qresource>
+</RCC>

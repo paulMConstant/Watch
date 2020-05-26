@@ -2,8 +2,10 @@
 #define CLIENT_H
 
 #include <QObject>
-#include <QTcpSocket>
+#include <QSslSocket>
 #include <QString>
+#include <QSslError>
+#include <QList>
 
 #include <Messages/timestamp.h>
 #include <Messages/message.h>
@@ -36,10 +38,11 @@ class Client : public QObject
     void onConnected() noexcept;
     void onDisconnected() noexcept;
     void socketError() noexcept;
+    void sslError(QList<QSslError> errors) noexcept;
     void dataReceived() noexcept;
 
   private:
-    QTcpSocket* socket = new QTcpSocket;
+    QSslSocket* socket = new QSslSocket(this);
     quint16 msgSize = 0;
     QString name;
 

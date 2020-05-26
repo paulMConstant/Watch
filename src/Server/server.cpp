@@ -1,6 +1,5 @@
 #include "server.h"
 
-#include <QTcpSocket>
 #include <QDataStream>
 
 #include <algorithm>
@@ -10,10 +9,9 @@
 
 Server::Server() noexcept
 {
-    connect(server, SIGNAL(newConnection()), this, SLOT(newConnection()));
-    if (server->listen(QHostAddress::Any, Constants::port) == false)
+    if (listen(QHostAddress::Any, Constants::port) == false)
     {
-        Logger::print("Could not initialize server : " + server->errorString() + '.');
+        Logger::print("Could not initialize server : " + errorString() + '.');
         exit(1);
     }
     else
@@ -24,20 +22,26 @@ Server::Server() noexcept
 
 Server::~Server() noexcept
 {
-    server->close();
+    close();
 }
 
-void Server::newConnection() noexcept
+void Server::incomingConnection(qintptr handle)
 {
-    auto socket = server->nextPendingConnection();
+    auto socket = new QSslSocket(this);
+    socket->setSocketDescriptor(handle);
+    socket->setLocalCertificate(":/cert", QSsl::Pem);
+    socket->setPrivateKey(":/pkey", QSsl::Rsa, QSsl::Pem);
+    socket->startServerEncryption();
+
     connect(socket, SIGNAL(readyRead()), this, SLOT(dataReceived()));
     connect(socket, SIGNAL(disconnected()), this, SLOT(clientDisconnected()));
     connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(socketError()));
+    connect(socket, SIGNAL(sslErrors(QList<QSslError>)), this, SLOT(sslError(QList<QSslError>)));
 }
 
 void Server::dataReceived() noexcept
 {
-    auto socket = qobject_cast<QTcpSocket*>(sender());
+    auto socket = qobject_cast<QSslSocket*>(sender());
     if (socket == nullptr)
     {
         return;
@@ -66,7 +70,7 @@ void Server::dataReceived() noexcept
     }
 }
 
-void Server::processMessage(const Message &message, QTcpSocket* source) noexcept
+void Server::processMessage(const Message &message, QSslSocket* source) noexcept
 {
     switch(message.type)
     {
@@ -85,7 +89,7 @@ void Server::processMessage(const Message &message, QTcpSocket* source) noexcept
     }
 }
 
-void Server::registerClientName(const QString &name, QTcpSocket *source) noexcept
+void Server::registerClientName(const QString &name, QSslSocket *source) noexcept
 {
     Logger::print("New client or name change : " + name);
     connectedClients[source] = Client(name);
@@ -102,7 +106,7 @@ void Server::sendConnectedClientsList() noexcept
     broadcast(Message(Message::Type::Name, clientNames));
 }
 
-void Server::broadcast(const Message& message, QTcpSocket* source) noexcept
+void Server::broadcast(const Message& message, QSslSocket* source) noexcept
 {
     for (auto socket : connectedClients.keys())
     {
@@ -116,7 +120,7 @@ void Server::broadcast(const Message& message, QTcpSocket* source) noexcept
 
 void Server::clientDisconnected() noexcept
 {
-    auto socket = qobject_cast<QTcpSocket*>(sender());
+    auto socket = qobject_cast<QSslSocket*>(sender());
     if (socket == nullptr)
     {
         return;
@@ -125,15 +129,29 @@ void Server::clientDisconnected() noexcept
     Logger::print(connectedClients[socket].name + " disconnected.");
     connectedClients.remove(socket);
     sendConnectedClientsList();
-
 }
 
 void Server::socketError() noexcept
 {
-    auto socket = qobject_cast<QTcpSocket*>(sender());
+    auto socket = qobject_cast<QSslSocket*>(sender());
     if (socket == nullptr)
     {
         return;
     }
     Logger::print("Error : " + socket->errorString());
+}
+
+void Server::sslError(QList<QSslError> errors) noexcept
+{
+    auto socket = qobject_cast<QSslSocket*>(sender());
+    if (socket == nullptr)
+    {
+        return;
+    }
+    socket->disconnectFromHost();
+    if (errors.empty())
+    {
+        return;
+    }
+    Logger::print("Error : " + errors.takeAt(0).errorString());
 }

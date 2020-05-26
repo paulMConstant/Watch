@@ -6,9 +6,11 @@
 #include <QSet>
 #include <QTcpServer>
 #include <QHostAddress>
-#include <Messages/message.h>
+#include <QSslSocket>
+#include <QSslError>
+#include <QList>
 
-class QTcpSocket;
+#include <Messages/message.h>
 
 struct Client {
     explicit Client(const QString& name = "Unknown") : name(name)
@@ -20,7 +22,7 @@ struct Client {
 };
 
 
-class Server : public QObject
+class Server : public QTcpServer
 {
     Q_OBJECT
   public:
@@ -28,19 +30,21 @@ class Server : public QObject
     ~Server() noexcept;
 
   private slots:
-    void newConnection() noexcept;
     void dataReceived() noexcept;
     void clientDisconnected() noexcept;
     void socketError() noexcept;
+    void sslError(QList<QSslError> errors) noexcept;
+
+  protected:
+    void incomingConnection(qintptr handle) override;
 
   private:
-    QTcpServer* server = new QTcpServer(this);
-    QMap<QTcpSocket*, Client> connectedClients;
+    QMap<QSslSocket*, Client> connectedClients;
 
-    void processMessage(const Message& message, QTcpSocket* source) noexcept;
-    void registerClientName(const QString& name, QTcpSocket* source) noexcept;
+    void processMessage(const Message& message, QSslSocket* source) noexcept;
+    void registerClientName(const QString& name, QSslSocket* source) noexcept;
     void sendConnectedClientsList() noexcept;
-    void broadcast(const Message& message, QTcpSocket* source = nullptr) noexcept;
+    void broadcast(const Message& message, QSslSocket* source = nullptr) noexcept;
 };
 
 #endif // SERVER_H

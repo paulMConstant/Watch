@@ -26,3 +26,6 @@ HEADERS += \
 
 LIBS += -L$$PWD/../../../build-Watch-Desktop-Release/src/Messages -lMessages
 INCLUDEPATH += $$PWD/../
+
+RESOURCES += \
+    Resources/resources.qrc

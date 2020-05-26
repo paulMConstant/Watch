@@ -36,3 +36,6 @@ build-*/
 
 # Qt .user
 *.pro.user
+
+# Certificates
+*.pem
