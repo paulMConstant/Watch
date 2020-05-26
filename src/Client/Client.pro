@@ -50,7 +50,7 @@ FORMS += \
     HMI/networkdisplay.ui \
     HMI/mainwindow.ui
 
-LIBS += -L$$PWD/../../../build-Watch-Desktop-Release/src/Messages -lMessages
+LIBS += -lWatchMessages
 INCLUDEPATH += $$PWD/../
 
 LIBS        += -lVLCQtCore -lVLCQtWidgets

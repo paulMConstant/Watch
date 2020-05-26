@@ -17,14 +17,16 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     main.cpp \
+    password.cpp \
     server.cpp \
     Logger/logger.cpp
 
 HEADERS += \
+    password.h \
     server.h \
     Logger/logger.h
 
-LIBS += -L$$PWD/../../../build-Watch-Desktop-Release/src/Messages -lMessages
+LIBS += -lWatchMessages
 INCLUDEPATH += $$PWD/../
 
 RESOURCES += \
