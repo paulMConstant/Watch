@@ -2,7 +2,7 @@
 #define CUSTOMSIGNALSMEDIAPLAYER_H
 
 #include <QObject>
-#include <QTime>
+#include <QElapsedTimer>
 #include <VLCQtCore/MediaPlayer.h>
 
 class VlcInstance;
@@ -62,7 +62,7 @@ class CustomSignalsMediaPlayer : public VlcMediaPlayer
 
   private:
     bool paused = true;
-    QTime lastTimeSetTime;
+    QElapsedTimer lastTimeSetTime;
     /*!
      * \brief returns true if setting the video at this time makes it valid.
      * \see videoIsPlayable

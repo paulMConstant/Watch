@@ -13,7 +13,7 @@ class DiscreetDock : public QDockWidget
     explicit DiscreetDock(QWidget* parent = nullptr) noexcept;
 
   protected:
-    void closeEvent(QCloseEvent* event);
+    void closeEvent(QCloseEvent* event) override;
     void enterEvent(QEvent* event) override;
     void leaveEvent(QEvent* event) override;
 
