@@ -5,9 +5,12 @@
 #include <QDataStream>
 #include <QSslKey>
 #include <QSslCertificate>
+#include <QInputDialog>
 #include <QFile>
 
 #include <Messages/constants.h>
+#include <Messages/hello.h>
+#include <Messages/passwordconventions.h>
 #include "Logger/logger.h"
 #include "Helpers/helpers.h"
 
@@ -80,11 +83,6 @@ void Client::sendMedia(const QString& media) noexcept
     }
 }
 
-void Client::sendName() noexcept
-{
-    sendMessage(Message(Message::Type::Name, name));
-}
-
 void Client::setName(const QString& name) noexcept
 {
     if (name == this->name)
@@ -92,14 +90,25 @@ void Client::setName(const QString& name) noexcept
         return;
     }
     this->name = name;
-    sendName();
 }
 
 void Client::onConnected() noexcept
 {
-    sendName();
-    Logger::printGreen("Connection succesful");
-    emit connected();
+    bool ok;
+    auto password = QInputDialog::getText(NULL,
+                                          tr("Password ?"),
+                                          tr("Enter the server password :"),
+                                          QLineEdit::Password,
+                                          "", &ok);
+    if (!ok)
+    {
+        disconnectFromServer();
+    }
+    else
+    {
+        auto hash = PasswordConventions::hash(password);
+        sendMessage(Message(Message::Type::Hello, QVariant::fromValue<Hello>(Hello(hash, name))));
+    }
 }
 
 void Client::sendMessage(const Message& message) noexcept
@@ -113,7 +122,15 @@ void Client::sendMessage(const Message& message) noexcept
 
 void Client::onDisconnected() noexcept
 {
-    Logger::printGreen("Disconnected.");
+    if (connectionACK)
+    {
+        Logger::printGreen("Disconnected.");
+    }
+    else
+    {
+        Logger::printRed("Invalid password.");
+    }
+    connectionACK = false;
     emit disconnected();
 }
 
@@ -163,7 +180,13 @@ void Client::processMessage(const Message& message) noexcept
 {
     switch (message.type)
     {
-        case Message::Type::Name:
+        case Message::Type::Hello:
+            connectionACK = true;
+            Logger::printGreen("Connection succesful");
+            emit connected();
+            break;
+
+        case Message::Type::Names:
             emit connectionsChanged(message.data.toStringList());
             break;
 

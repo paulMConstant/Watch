@@ -6,7 +6,7 @@
 
 QT       -= gui
 
-TARGET = Messages
+TARGET = WatchMessages
 TEMPLATE = lib
 CONFIG += staticlib
 
@@ -22,11 +22,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    hello.cpp \
     message.cpp \
     timestamp.cpp
 
 HEADERS += \
+    hello.h \
     message.h \
+    passwordconventions.h \
     timestamp.h \
     constants.h
 

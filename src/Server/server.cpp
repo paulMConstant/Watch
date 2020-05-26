@@ -1,26 +1,25 @@
 #include "Server/server.h"
 
-#include <Messages/constants.h>
-
 #include <QDataStream>
+#include <QHostAddress>
 #include <QSslKey>
 #include <QFile>
 
 #include <algorithm>
 
+#include <Messages/constants.h>
 #include "Logger/logger.h"
 
 Server::Server() noexcept
 {
+    password.readFromUser();
+
     if (listen(QHostAddress::Any, Constants::port) == false)
     {
         Logger::print("Could not initialize server : " + errorString() + '.');
         exit(1);
     }
-    else
-    {
-        Logger::print("Server listening on port " + QString::number(Constants::port) + '.');
-    }
+    Logger::print("Server listening on port " + QString::number(Constants::port) + '.');
 }
 
 Server::~Server() noexcept
@@ -74,29 +73,37 @@ void Server::dataReceived() noexcept
 
 void Server::processMessage(const Message& message, QSslSocket* source) noexcept
 {
-    switch (message.type)
+    if (connectedClients[source].authenticated == false)
     {
-        case Message::Type::Name:
-            registerClientName(message.data.toString(), source);
-            break;
-
-        case Message::Type::Info:
-        case Message::Type::Timestamp:
-        case Message::Type::Chat:
-        case Message::Type::Media:
-            broadcast(message, source);
-            break;
-
-        default:
-            Logger::print("Received invalid message...");
+        if (message.type == Message::Type::Hello)
+        {
+            registerClient(message.data.value<Hello>(), source);
+        }
+        else
+        {
+            source->disconnectFromHost();
+        }
+    }
+    else
+    {
+        broadcast(message, source);
     }
 }
 
-void Server::registerClientName(const QString& name, QSslSocket* source) noexcept
+void Server::registerClient(const Hello& hello, QSslSocket* source) noexcept
 {
-    Logger::print("New client or name change : " + name);
-    connectedClients[source] = Client(name);
-    sendConnectedClientsList();
+    if (password.equals(hello.password))
+    {
+        Logger::print("New client : " + hello.name);
+        connectedClients[source] = Client(hello.name, true);
+        send(Message(Message::Type::Hello, 0), source);  // ACK
+        sendConnectedClientsList();
+    }
+    else
+    {
+        Logger::print("Rejected client '" + hello.name + "' connecting with wrong password.");
+        source->disconnectFromHost();
+    }
 }
 
 void Server::sendConnectedClientsList() noexcept
@@ -106,7 +113,7 @@ void Server::sendConnectedClientsList() noexcept
     {
         clientNames << client.name;
     }
-    broadcast(Message(Message::Type::Name, clientNames));
+    broadcast(Message(Message::Type::Names, clientNames));
 }
 
 void Server::broadcast(const Message& message, QSslSocket* source) noexcept
@@ -121,6 +128,12 @@ void Server::broadcast(const Message& message, QSslSocket* source) noexcept
     }
 }
 
+void Server::send(const Message& message, QSslSocket* destination) noexcept
+{
+    destination->write(message.toByteArray());
+    destination->flush();
+}
+
 void Server::clientDisconnected() noexcept
 {
     auto socket = qobject_cast<QSslSocket*>(sender());
@@ -128,10 +141,13 @@ void Server::clientDisconnected() noexcept
     {
         return;
     }
-
-    Logger::print(connectedClients[socket].name + " disconnected.");
+    if (connectedClients[socket].authenticated)
+    {
+        Logger::print(connectedClients[socket].name + " disconnected.");
+        sendConnectedClientsList();
+    }
     connectedClients.remove(socket);
-    sendConnectedClientsList();
+    socket->deleteLater();
 }
 
 void Server::socketError() noexcept

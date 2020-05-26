@@ -1,4 +1,14 @@
-#ifndef PASSWORD_H
-#define PASSWORD_H
+#ifndef PASSWORDCONVENTIONS_H
+#define PASSWORDCONVENTIONS_H
 
-#endif // PASSWORD_H
+#include <QCryptographicHash>
+#include <QByteArray>
+#include <QString>
+
+namespace PasswordConventions
+{
+[[nodiscard]] inline QByteArray hash(const QString& password) noexcept
+{ return QCryptographicHash::hash(password.toUtf8(), QCryptographicHash::Sha512); }
+}
+
+#endif  // PASSWORD_H

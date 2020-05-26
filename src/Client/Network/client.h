@@ -49,9 +49,9 @@ class Client : public QObject
     quint16 msgSize = 0;
     QString name;
     QMediaPlayer notificationPlayer;
+    bool connectionACK = false;
 
     QString namedMessage(QString msg) const noexcept;
-    void sendName() noexcept;
     void sendMessage(const Message& message) noexcept;
     void processMessage(const Message& message) noexcept;
     QSslConfiguration sslConfig() const noexcept;

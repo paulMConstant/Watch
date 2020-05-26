@@ -10,14 +10,19 @@
 #include <QList>
 
 #include <Messages/message.h>
+#include <Messages/hello.h>
+
+#include "password.h"  // NOLINT[build/include_subdir]
 
 struct Client
 {
-    explicit Client(const QString& name = "Unknown") : name(name)
+    explicit Client(const QString& name = "Unknown", bool authenticated = false) :
+        name(name), authenticated(authenticated)
     {
     }
 
-    QString name = "Unknown";
+    QString name;
+    bool authenticated;
     quint16 msgSize = 0;
 };
 
@@ -40,11 +45,13 @@ class Server : public QTcpServer
 
   private:
     QMap<QSslSocket*, Client> connectedClients;
+    Password password;
 
     void processMessage(const Message& message, QSslSocket* source) noexcept;
-    void registerClientName(const QString& name, QSslSocket* source) noexcept;
+    void registerClient(const Hello& hello, QSslSocket* source) noexcept;
     void sendConnectedClientsList() noexcept;
     void broadcast(const Message& message, QSslSocket* source = nullptr) noexcept;
+    void send(const Message& message, QSslSocket* destination) noexcept;
     QSslConfiguration sslConfig() const noexcept;
 };
 
