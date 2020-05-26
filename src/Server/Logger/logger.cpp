@@ -1,10 +1,12 @@
 #include "Logger/logger.h"
 
-#include <QDebug>
 #include <QTime>
+#include <QTextStream>
 
 void Logger::print(const QString& msg) noexcept
 {
-    const auto timeStamp = '[' + QTime::currentTime().toString("hh:mm:ss") + "]";
-    qDebug() << timeStamp + msg;
+    auto out = QTextStream(stdout);
+    const auto timeStamp = '[' + QTime::currentTime().toString("hh:mm:ss") + "] ";
+    out << timeStamp << msg;
+    Qt::endl(out);
 }
