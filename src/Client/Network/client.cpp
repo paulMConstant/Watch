@@ -65,11 +65,11 @@ void Client::sendInfo(QString info) noexcept
     sendMessage(Message(Message::Type::Info, info));
 }
 
-void Client::sendURL(const QString& URL) noexcept
+void Client::sendMedia(const QString& media) noexcept
 {
     if (isConnectedToServer())
     {
-        sendMessage(Message(Message::Type::URL, URL));
+        sendMessage(Message(Message::Type::Media, media));
         Logger::printGreen("Shared current media.");
     }
     else
@@ -175,8 +175,8 @@ void Client::processMessage(const Message& message) noexcept
             Logger::printBlack(message.data.toString());
             break;
 
-        case Message::Type::URL:
-            emit urlChanged(message.data.toString());
+        case Message::Type::Media:
+            emit mediaChanged(message.data.toString());
             break;
 
         default:

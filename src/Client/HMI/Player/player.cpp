@@ -33,7 +33,7 @@ Player::Player(QWidget* parent) noexcept :
 
     connect(ui->playPause, SIGNAL(clicked(bool)), this, SLOT(togglePause()));
     connect(player, SIGNAL(manualActionTriggered()), this, SLOT(sendTimestamp()));
-    connect(player, SIGNAL(timeChanged(int)), this, SLOT(StopVideoIfEnded()));
+    connect(player, SIGNAL(timeChanged(int)), this, SLOT(stopVideoIfEnded()));
 }
 
 Player::~Player() noexcept
@@ -53,7 +53,7 @@ void Player::setClient(Client* client) noexcept
 {
     this->client = client;
     connect(client, SIGNAL(timestampChanged(Timestamp)), this, SLOT(receiveTimestamp(Timestamp)));
-    connect(client, SIGNAL(urlChanged(QString)), this, SLOT(playFile(QString)));
+    connect(client, SIGNAL(mediaChanged(QString)), this, SLOT(receiveDistantMedia(QString)));
 }
 
 void Player::goForward() noexcept
@@ -118,7 +118,7 @@ void Player::shareCurrentMedia() noexcept
         Logger::printRed("Sharing of local files is not yet implemented.");
         return;
     }
-    client->sendURL(currentFile);
+    client->sendMedia(currentFile);
 }
 
 void Player::hideUI() noexcept
@@ -193,6 +193,12 @@ void Player::receiveTimestamp(const Timestamp& timestamp) noexcept
     }
 }
 
+void Player::receiveDistantMedia(const QString &media) noexcept
+{
+    Logger::printGreen("Received media to play : '" + media + '\'');
+    playFile(media);
+}
+
 void Player::pause(bool sendSignal) noexcept
 {
     if (hasMedia() == false)
@@ -227,7 +233,7 @@ void Player::play(bool sendSignal) noexcept
     ui->playPause->setText("Pause");
 }
 
-void Player::StopVideoIfEnded() noexcept
+void Player::stopVideoIfEnded() noexcept
 {
     if (player->videoIsPlayable() == false)
     {

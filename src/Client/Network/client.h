@@ -20,13 +20,13 @@ class Client : public QObject
     void sendTimestamp(const Timestamp& timestamp) noexcept;
     void sendChat(QString chatMessage) noexcept;
     void sendInfo(QString info) noexcept;
-    void sendURL(const QString& URL) noexcept;
+    void sendMedia(const QString& media) noexcept;
     [[nodiscard]] bool isConnectedToServer() const noexcept;
 
   signals:
     void connectionsChanged(QStringList);
     void timestampChanged(Timestamp);
-    void urlChanged(QString);
+    void mediaChanged(QString);
     void disconnected();
     void connected();
 

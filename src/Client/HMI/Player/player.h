@@ -39,7 +39,6 @@ class Player : public QWidget
     void askOpenURL() noexcept;
     void playFile(const QString& file) noexcept;
     void shareCurrentMedia() noexcept;
-    void receiveTimestamp(const Timestamp& timestamp) noexcept;
 
   protected:
     bool eventFilter(QObject* object, QEvent* event) noexcept;
@@ -47,6 +46,8 @@ class Player : public QWidget
   private slots:
     void sendTimestamp() noexcept;
     void stopVideoIfEnded() noexcept;
+    void receiveTimestamp(const Timestamp& timestamp) noexcept;
+    void receiveDistantMedia(const QString& media) noexcept;
 
   private:
     Ui::Player* ui;

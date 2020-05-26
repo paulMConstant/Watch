@@ -81,7 +81,7 @@ void Server::processMessage(const Message& message, QSslSocket* source) noexcept
         case Message::Type::Info:
         case Message::Type::Timestamp:
         case Message::Type::Chat:
-        case Message::Type::URL:
+        case Message::Type::Media:
             broadcast(message, source);
             break;
 
