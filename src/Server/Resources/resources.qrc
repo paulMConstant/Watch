@@ -2,5 +2,6 @@
     <qresource prefix="/certs/">
         <file alias="cert">../../../certs/server_cert.pem</file>
         <file alias="pkey">../../../certs/server_pkey.pem</file>
+        <file alias="client_cert">../../../certs/client_cert.pem</file>
     </qresource>
 </RCC>

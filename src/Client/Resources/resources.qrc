@@ -1,5 +1,7 @@
 <RCC>
     <qresource prefix="/certs/">
+        <file alias="cert">../../../certs/client_cert.pem</file>
+        <file alias="pkey">../../../certs/client_pkey.pem</file>
         <file alias="server_cert">../../../certs/server_cert.pem</file>
     </qresource>
     <qresource prefix="/sounds/">

@@ -5,6 +5,7 @@
 #include <QSslSocket>
 #include <QString>
 #include <QSslError>
+#include <QSslConfiguration>
 #include <QList>
 #include <QMediaPlayer>
 
@@ -15,7 +16,7 @@ class Client : public QObject
 {
     Q_OBJECT
   public:
-    Client() noexcept;
+    Client();
     ~Client() noexcept;
 
     void sendTimestamp(const Timestamp& timestamp) noexcept;
@@ -49,10 +50,11 @@ class Client : public QObject
     QString name;
     QMediaPlayer notificationPlayer;
 
-    QString namedMessage(QString msg) noexcept;
+    QString namedMessage(QString msg) const noexcept;
     void sendName() noexcept;
     void sendMessage(const Message& message) noexcept;
     void processMessage(const Message& message) noexcept;
+    QSslConfiguration sslConfig() const noexcept;
 };
 
 #endif  // CLIENT_H

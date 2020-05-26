@@ -3,21 +3,19 @@
 #include <QCoreApplication>
 #include <QByteArray>
 #include <QDataStream>
-#include <QHostAddress>
-#include <QSslSocket>
 #include <QSslKey>
 #include <QSslCertificate>
-#include <QSound>
-#include <QMediaPlayer>
+#include <QFile>
 
 #include <Messages/constants.h>
 #include "Logger/logger.h"
 #include "Helpers/helpers.h"
 
-Client::Client() noexcept
+Client::Client()
 {
     notificationPlayer.setVolume(50);
-    socket->addCaCertificates(":/certs/server_cert");
+    socket->setSslConfiguration(sslConfig());
+
     connect(socket, SIGNAL(connected()), this, SLOT(onConnected()));
     connect(socket, SIGNAL(disconnected()), this, SLOT(onDisconnected()));
     connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(socketError()));
@@ -190,7 +188,23 @@ void Client::processMessage(const Message& message) noexcept
     }
 }
 
-QString Client::namedMessage(QString msg) noexcept
+QSslConfiguration Client::sslConfig() const noexcept
+{
+    auto config = QSslConfiguration();
+    auto certificate = QSslCertificate::fromPath(":/certs/cert");
+    Q_ASSERT_X(certificate.size(), "Client::sslConfig()", "No certificate found in qrc. "
+                                                       "Run /certs/create_client_certificate.sh");
+    config.setLocalCertificate(certificate.at(0));
+    auto key = QFile(":/certs/pkey");
+    key.open(QIODevice::ReadOnly);
+    config.setPrivateKey(QSslKey(key.readAll(), QSsl::Rsa));
+    key.close();
+    config.setPeerVerifyMode(QSslSocket::VerifyPeer);
+    config.setCaCertificates(QSslCertificate::fromPath(":/certs/server_cert"));
+    return config;
+}
+
+QString Client::namedMessage(QString msg) const noexcept
 {
     auto htmlName = Helpers::String::cleanHtml(name);
     msg = "<b>" + htmlName + " :</b> " + msg;

@@ -3,11 +3,10 @@
 
 #include <QObject>
 #include <QString>
-#include <QSet>
 #include <QTcpServer>
-#include <QHostAddress>
 #include <QSslSocket>
 #include <QSslError>
+#include <QSslConfiguration>
 #include <QList>
 
 #include <Messages/message.h>
@@ -46,6 +45,7 @@ class Server : public QTcpServer
     void registerClientName(const QString& name, QSslSocket* source) noexcept;
     void sendConnectedClientsList() noexcept;
     void broadcast(const Message& message, QSslSocket* source = nullptr) noexcept;
+    QSslConfiguration sslConfig() const noexcept;
 };
 
 #endif  // SERVER_H

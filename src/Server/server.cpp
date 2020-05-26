@@ -3,6 +3,9 @@
 #include <Messages/constants.h>
 
 #include <QDataStream>
+#include <QSslKey>
+#include <QFile>
+
 #include <algorithm>
 
 #include "Logger/logger.h"
@@ -29,8 +32,7 @@ void Server::incomingConnection(qintptr handle)
 {
     auto socket = new QSslSocket(this);
     socket->setSocketDescriptor(handle);
-    socket->setLocalCertificate(":/certs/cert", QSsl::Pem);
-    socket->setPrivateKey(":/certs/pkey", QSsl::Rsa, QSsl::Pem);
+    socket->setSslConfiguration(sslConfig());
     socket->startServerEncryption();
 
     connect(socket, SIGNAL(readyRead()), this, SLOT(dataReceived()));
@@ -155,4 +157,20 @@ void Server::sslError(QList<QSslError> errors) noexcept
         return;
     }
     Logger::print("Error : " + errors.takeAt(0).errorString());
+}
+
+QSslConfiguration Server::sslConfig() const noexcept
+{
+    auto config = QSslConfiguration();
+    auto certificate = QSslCertificate::fromPath(":/certs/cert");
+    Q_ASSERT_X(certificate.size(), "Server::sslConfig()",
+        "No certificate found in qrc. Run /certs/create_server_certificate.sh");
+    config.setLocalCertificate(certificate.at(0));
+    auto key = QFile(":/certs/pkey");
+    key.open(QIODevice::ReadOnly);
+    config.setPrivateKey(QSslKey(key.readAll(), QSsl::Rsa));
+    key.close();
+    config.setCaCertificates(QSslCertificate::fromPath(":/certs/client_cert"));
+    config.setPeerVerifyMode(QSslSocket::VerifyPeer);
+    return config;
 }
