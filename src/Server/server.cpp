@@ -29,6 +29,7 @@ Server::~Server() noexcept
 
 void Server::incomingConnection(qintptr handle)
 {
+    Logger::print("Received incoming connection.");
     auto socket = new QSslSocket(this);
     socket->setSocketDescriptor(handle);
     socket->setSslConfiguration(sslConfig());
@@ -81,6 +82,7 @@ void Server::processMessage(const Message& message, QSslSocket* source) noexcept
         }
         else
         {
+            Logger::print("First message from client is not hello. Disconnecting.");
             source->disconnectFromHost();
         }
     }
@@ -92,9 +94,10 @@ void Server::processMessage(const Message& message, QSslSocket* source) noexcept
 
 void Server::registerClient(const Hello& hello, QSslSocket* source) noexcept
 {
+    Logger::print("New connection : " + hello.name);
     if (password.equals(hello.password))
     {
-        Logger::print("New client : " + hello.name);
+        Logger::print("Authentication succesful : " + hello.name);
         connectedClients[source] = Client(hello.name, true);
         send(Message(Message::Type::Hello, 0), source);  // ACK
         sendConnectedClientsList();
@@ -102,6 +105,7 @@ void Server::registerClient(const Hello& hello, QSslSocket* source) noexcept
     else
     {
         Logger::print("Rejected client '" + hello.name + "' connecting with wrong password.");
+        connectedClients[source] = Client(hello.name, false);
         source->disconnectFromHost();
     }
 }
@@ -143,9 +147,9 @@ void Server::clientDisconnected() noexcept
     }
     if (connectedClients[socket].authenticated)
     {
-        Logger::print(connectedClients[socket].name + " disconnected.");
         sendConnectedClientsList();
     }
+    Logger::print(connectedClients[socket].name + " disconnected.");
     connectedClients.remove(socket);
     socket->deleteLater();
 }

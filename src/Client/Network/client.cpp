@@ -102,6 +102,7 @@ void Client::onConnected() noexcept
                                           "", &ok);
     if (!ok)
     {
+        connectionACK = true;
         disconnectFromServer();
     }
     else
