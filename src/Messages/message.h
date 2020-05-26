@@ -7,7 +7,7 @@
 
 struct Message
 {
-    enum class Type {Invalid, Name, Timestamp, Chat, URL};
+    enum class Type {Invalid, Name, Timestamp, Chat, URL, Info};
 
     Message() = default;
     explicit Message(Message::Type type, QVariant data) noexcept;
