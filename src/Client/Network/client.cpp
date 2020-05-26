@@ -169,7 +169,6 @@ void Client::processMessage(const Message& message) noexcept
         break;
 
     case Message::Type::URL:
-        Logger::printChatMsg("J'ai reçu un URL");
         emit urlChanged(message.data.toString());
         break;
 

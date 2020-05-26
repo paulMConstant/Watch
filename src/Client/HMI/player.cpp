@@ -5,6 +5,7 @@
 #include <QFileInfo>
 #include <QFileDialog>
 #include <QInputDialog>
+#include <QFile>
 
 #include <VLCQtCore/Common.h>
 #include <VLCQtCore/Instance.h>
@@ -85,7 +86,7 @@ void Player::askOpenFile() noexcept
     if (file.isEmpty())
         return;
 
-    playFile(file, true);
+    playFile(file);
 }
 
 void Player::askOpenURL() noexcept
@@ -96,7 +97,7 @@ void Player::askOpenURL() noexcept
     if (url.isEmpty())
         return;
 
-    playFile(url, false);
+    playFile(url);
 }
 
 void Player::shareCurrentMedia() noexcept
@@ -104,6 +105,12 @@ void Player::shareCurrentMedia() noexcept
     if (player->currentMedia() == nullptr)
     {
         Logger::printError("Cannot share media : no open media.");
+        return;
+    }
+
+    if (currentFileIsLocal())
+    {
+        Logger::printError("Sharing of local files is not yet implemented.");
         return;
     }
     client->sendURL(currentFile);
@@ -137,22 +144,25 @@ void Player::togglePause() noexcept
     }
 }
 
-void Player::playFile(const QString& file, bool local) noexcept
+void Player::playFile(const QString& file) noexcept
 {
-    media = new VlcMedia(file, local, instance);
+    currentFile = file;
+    auto local = currentFileIsLocal();
+    media = new VlcMedia(currentFile, local, instance);
     player->open(media);
     ui->playPause->setText("Pause");
+    auto filename = currentFile;
     if (local)
     {
-        currentFile= QFileInfo(file).fileName();
+        filename = QFileInfo(currentFile).fileName();
     }
-    else
-    {
-        currentFile = file;
-    }
-    client->sendChat("<i>playing '" + currentFile + "'.</i>");
+    client->sendChat("<i>playing '" + filename + "'.</i>");
 }
 
+bool Player::currentFileIsLocal() noexcept
+{
+    return QFile::exists(currentFile);
+}
 void Player::sendTimestamp() noexcept
 {
     auto timestamp = Timestamp(player->isPaused(), player->time());

@@ -36,7 +36,7 @@ class Player : public QWidget
     void togglePause() noexcept;
     void askOpenFile() noexcept;
     void askOpenURL() noexcept;
-    void playFile(const QString& file, bool local = false) noexcept;
+    void playFile(const QString& file) noexcept;
     void shareCurrentMedia() noexcept;
     void receiveTimestamp(const Timestamp& timestamp) noexcept;
 
@@ -60,6 +60,7 @@ class Player : public QWidget
 
     void pause(bool sendSignal = true) noexcept;
     void play(bool sendSignal = true) noexcept;
+    [[nodiscard]] bool currentFileIsLocal() noexcept;
 
     static constexpr auto timeJumpMS = 3000;
 };
