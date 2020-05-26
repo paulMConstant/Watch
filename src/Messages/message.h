@@ -7,7 +7,7 @@
 
 struct Message
 {
-    enum class Type {Invalid, Name, Timestamp, Chat, Media, Info};
+    enum class Type {Hello, Names, Timestamp, Chat, Media, Info};
 
     Message() = default;
     explicit Message(Message::Type type, QVariant data) noexcept;
@@ -15,6 +15,8 @@ struct Message
 
     Message::Type type;
     QVariant data;
+
+    static void registerMetatypes() noexcept;
 };
 
 QDataStream& operator<<(QDataStream& ds, const Message& message);

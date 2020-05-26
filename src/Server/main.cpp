@@ -1,14 +1,13 @@
 #include <QCoreApplication>
 #include <QMetaType>
 
-#include <Messages/timestamp.h>
+#include <Messages/message.h>
 #include "Server/server.h"
 
 int main(int argc, char* argv[])
 {
     QCoreApplication a(argc, argv);
-    qRegisterMetaType<Timestamp>("Timestamp");
-    qRegisterMetaTypeStreamOperators<Timestamp>("Timestamp");
+    Message::registerMetatypes();
     auto server = Server();
     return a.exec();
 }
