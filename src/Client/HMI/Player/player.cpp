@@ -193,7 +193,7 @@ void Player::receiveTimestamp(const Timestamp& timestamp) noexcept
     }
 }
 
-void Player::receiveDistantMedia(const QString &media) noexcept
+void Player::receiveDistantMedia(const QString& media) noexcept
 {
     Logger::printGreen("Received media to play : '" + media + '\'');
     playFile(media);

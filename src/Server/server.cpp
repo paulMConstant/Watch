@@ -1,10 +1,10 @@
 #include "Server/server.h"
 
-#include <QDataStream>
+#include <Messages/constants.h>
 
+#include <QDataStream>
 #include <algorithm>
 
-#include <Messages/constants.h>
 #include "Logger/logger.h"
 
 Server::Server() noexcept

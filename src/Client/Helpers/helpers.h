@@ -5,10 +5,10 @@
 
 namespace Helpers
 {
-    namespace String
-    {
-        QString cleanHtml(QString str) noexcept;
-    }
+namespace String
+{
+QString cleanHtml(QString str) noexcept;
+}
 
 }  // namespace Helpers
 
