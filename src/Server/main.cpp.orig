@@ -2,9 +2,9 @@
 #include <QMetaType>
 
 #include <Messages/timestamp.h>
-#include "Server/server.h"
+#include "server.h"
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
     qRegisterMetaType<Timestamp>("Timestamp");

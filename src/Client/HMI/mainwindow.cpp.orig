@@ -1,12 +1,11 @@
 #include "HMI/mainwindow.h"
-
 #include <QKeyEvent>
 #include <QLineEdit>
 
-#include "ui_mainwindow.h"  // NOLINT[build/include_subdir]
+#include "ui_mainwindow.h"
 #include "HMI/Player/player.h"
 
-MainWindow::MainWindow(QWidget* parent) noexcept :
+MainWindow::MainWindow(QWidget *parent) noexcept :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
@@ -28,8 +27,7 @@ bool MainWindow::eventFilter(QObject* object, QEvent* event)
     {
         const auto keyEvent = static_cast<QKeyEvent*>(event);
         const auto focus = QApplication::focusWidget();
-        const auto noLineEditInFocus = (focus == nullptr ||
-                                        qobject_cast<QLineEdit*>(focus) == nullptr);
+        const auto noLineEditInFocus = (focus == nullptr || qobject_cast<QLineEdit*>(focus) == nullptr);
 
         if (keyEvent->key() == Qt::Key_Space)
         {
@@ -74,6 +72,7 @@ bool MainWindow::eventFilter(QObject* object, QEvent* event)
             }
             return false;
         }
+
     }
     if (event->type() == QEvent::MouseMove)
     {
@@ -137,6 +136,5 @@ void MainWindow::initSlotConnections() noexcept
     connect(&hideUITimer, SIGNAL(timeout()), this, SLOT(hideUI()));
     connect(ui->actionOpen_local, SIGNAL(triggered(bool)), ui->player, SLOT(askOpenFile()));
     connect(ui->actionOpen_url, SIGNAL(triggered(bool)), ui->player, SLOT(askOpenURL()));
-    connect(ui->actionShare_current, SIGNAL(triggered(bool)),
-            ui->player, SLOT(shareCurrentMedia()));
+    connect(ui->actionShare_current, SIGNAL(triggered(bool)), ui->player, SLOT(shareCurrentMedia()));
 }

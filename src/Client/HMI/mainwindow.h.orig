@@ -6,8 +6,7 @@
 
 #include "Network/client.h"
 
-namespace Ui
-{
+namespace Ui {
 class MainWindow;
 }
 
@@ -41,4 +40,4 @@ class MainWindow : public QMainWindow
     void showHideDock(QDockWidget* dock) noexcept;
 };
 
-#endif  // MAINWINDOW_H
+#endif // MAINWINDOW_H

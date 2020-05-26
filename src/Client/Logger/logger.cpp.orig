@@ -1,4 +1,4 @@
-#include "Logger/logger.h"
+#include "logger.h"
 
 #include <QDebug>
 #include <QTime>
@@ -18,7 +18,7 @@ void print(const QString& msg, const QColor& color) noexcept
     msgList->insertHtml("<font color=\"" + color.name() + "\">" + timeStamp + msg + "</font><br>");
     msgList->textCursor().movePosition(QTextCursor::End);
 }
-}  // namespace
+} // namespace
 
 void Logger::init(QTextEdit* outputList) noexcept
 {
@@ -30,12 +30,13 @@ void Logger::printError(const QString& msg) noexcept
     print(msg, Qt::red);
 }
 
-void Logger::printInfo(const QString& msg) noexcept
+void Logger::printInfo(const QString &msg) noexcept
 {
     print(msg, Qt::darkGreen);
 }
 
-void Logger::printChatMsg(const QString& msg) noexcept
+void Logger::printChatMsg(const QString &msg) noexcept
 {
     print(msg, Qt::black);
 }
+

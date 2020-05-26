@@ -5,7 +5,7 @@
 
 namespace Logger
 {
-    void print(const QString& msg) noexcept;
-} // namespace
+void print(const QString& msg) noexcept;
+}  // namespace Logger
 
-#endif // LOGGER_H
+#endif  // LOGGER_H

@@ -6,10 +6,10 @@
 
 namespace Logger
 {
-    void init(QTextEdit* outputList) noexcept;
-    void printInfo(const QString& msg) noexcept;
-    void printError(const QString& msg) noexcept;
-    void printChatMsg(const QString& msg) noexcept;
-} // namespace
+void init(QTextEdit* outputList) noexcept;
+void printInfo(const QString& msg) noexcept;
+void printError(const QString& msg) noexcept;
+void printChatMsg(const QString& msg) noexcept;
+}  // namespace Logger
 
-#endif // LOGGER_H
+#endif  // LOGGER_H

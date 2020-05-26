@@ -156,7 +156,7 @@ void Player::playFile(const QString& file) noexcept
     {
         filename = QFileInfo(currentFile).fileName();
     }
-    client->sendChat("<i>playing '" + filename + "'.</i>");
+    client->sendInfo("<i>playing '" + filename + "'.</i>");
 }
 
 bool Player::currentFileIsLocal() noexcept

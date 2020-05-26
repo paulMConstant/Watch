@@ -1,4 +1,4 @@
-#include "HMI/Helpers/discreetdock.h"
+#include "HMI/Convenience/discreetdock.h"
 
 DiscreetDock::DiscreetDock(QWidget* parent) noexcept : QDockWidget(parent)
 {

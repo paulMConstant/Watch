@@ -5,8 +5,7 @@
 
 class Client;
 
-namespace Ui
-{
+namespace Ui {
 class NetworkDisplay;
 }
 
@@ -15,7 +14,7 @@ class NetworkDisplay : public QWidget
     Q_OBJECT
 
   public:
-    explicit NetworkDisplay(QWidget* parent = nullptr) noexcept;
+    explicit NetworkDisplay(QWidget *parent = nullptr) noexcept;
     ~NetworkDisplay();
 
     void setClient(Client* client) noexcept;
@@ -32,11 +31,11 @@ class NetworkDisplay : public QWidget
     void onConnected() noexcept;
 
   private:
-    Ui::NetworkDisplay* ui;
+    Ui::NetworkDisplay *ui;
     Client* client;
     QStringList lastConnectedUsers;
 
     void printUserListChanges(const QStringList& newConnectedUsers) noexcept;
 };
 
-#endif  // NETWORKDISPLAY_H
+#endif // NETWORKDISPLAY_H

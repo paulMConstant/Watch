@@ -1,4 +1,4 @@
-#include "message.h"
+#include "message.h"  // NOLINT[build/include_subdir]
 
 Message::Message(Message::Type type, QVariant data) noexcept:
     type(type), data(data)

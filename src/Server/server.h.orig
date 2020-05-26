@@ -12,8 +12,7 @@
 
 #include <Messages/message.h>
 
-struct Client
-{
+struct Client {
     explicit Client(const QString& name = "Unknown") : name(name)
     {
     }
@@ -48,4 +47,4 @@ class Server : public QTcpServer
     void broadcast(const Message& message, QSslSocket* source = nullptr) noexcept;
 };
 
-#endif  // SERVER_H
+#endif // SERVER_H

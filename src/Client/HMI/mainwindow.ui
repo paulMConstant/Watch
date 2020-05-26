@@ -116,7 +116,7 @@
   <customwidget>
    <class>Player</class>
    <extends>QWidget</extends>
-   <header>HMI/player.h</header>
+   <header>HMI/Player/player.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
@@ -128,7 +128,7 @@
   <customwidget>
    <class>DiscreetDock</class>
    <extends>QDockWidget</extends>
-   <header>HMI/Helpers/discreetdock.h</header>
+   <header>HMI/Convenience/discreetdock.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

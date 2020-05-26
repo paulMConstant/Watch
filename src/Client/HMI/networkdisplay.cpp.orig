@@ -1,12 +1,12 @@
-#include "HMI/networkdisplay.h"
+#include "networkdisplay.h"
+#include "ui_networkdisplay.h"
 
 #include <QSettings>
 
-#include "ui_networkdisplay.h"  // NOLINT[build/include_subdir]
 #include "Network/client.h"
 #include "Logger/logger.h"
 
-NetworkDisplay::NetworkDisplay(QWidget* parent) noexcept:
+NetworkDisplay::NetworkDisplay(QWidget *parent) noexcept:
     QWidget(parent),
     ui(new Ui::NetworkDisplay)
 {
@@ -35,7 +35,7 @@ NetworkDisplay::~NetworkDisplay()
     delete ui;
 }
 
-void NetworkDisplay::setClient(Client* client) noexcept
+void NetworkDisplay::setClient(Client *client) noexcept
 {
     this->client = client;
     connect(ui->connectButton, SIGNAL(clicked(bool)), this, SLOT(onConnectPressed()));

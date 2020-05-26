@@ -27,24 +27,24 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     main.cpp \
     HMI/mainwindow.cpp \
-    HMI/player.cpp \
+    HMI/Player/player.cpp \
     HMI/networkdisplay.cpp \
     Network/client.cpp \
     Logger/logger.cpp \
-    HMI/Helpers/customsignalsmediaplayer.cpp \
-    HMI/Helpers/discreetdock.cpp
+    HMI/Player/customsignalsmediaplayer.cpp \
+    HMI/Convenience/discreetdock.cpp
 
 HEADERS += \
     HMI/mainwindow.h \
-    HMI/player.h \
+    HMI/Player/player.h \
     HMI/networkdisplay.h \
     Network/client.h \
     Logger/logger.h \
-    HMI/Helpers/customsignalsmediaplayer.h \
-    HMI/Helpers/discreetdock.h
+    HMI/Player/customsignalsmediaplayer.h \
+    HMI/Convenience/discreetdock.h
 
 FORMS += \
-    HMI/player.ui \
+    HMI/Player/player.ui \
     HMI/networkdisplay.ui \
     HMI/mainwindow.ui
 

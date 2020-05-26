@@ -15,4 +15,4 @@ Q_DECLARE_METATYPE(Timestamp)
 QDataStream& operator<<(QDataStream& ds, const Timestamp& timestamp);
 QDataStream& operator>>(QDataStream& ds, Timestamp& timestamp);
 
-#endif // STREAM_H
+#endif  // STREAM_H

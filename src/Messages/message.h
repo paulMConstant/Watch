@@ -20,4 +20,4 @@ struct Message
 QDataStream& operator<<(QDataStream& ds, const Message& message);
 QDataStream& operator>>(QDataStream& ds, Message& message);
 
-#endif // MESSAGE_H
+#endif  // MESSAGE_H

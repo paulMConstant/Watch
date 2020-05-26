@@ -1,4 +1,4 @@
-#include "Network/client.h"
+#include "client.h"
 
 #include <QByteArray>
 #include <QDataStream>
@@ -154,25 +154,25 @@ void Client::dataReceived() noexcept
 
 void Client::processMessage(const Message& message) noexcept
 {
-    switch (message.type)
+    switch(message.type)
     {
-        case Message::Type::Name:
-            emit connectionsChanged(message.data.toStringList());
-            break;
+    case Message::Type::Name:
+        emit connectionsChanged(message.data.toStringList());
+        break;
 
-        case Message::Type::Timestamp:
-            emit timestampChanged(message.data.value<Timestamp>());
-            break;
+    case Message::Type::Timestamp:
+        emit timestampChanged(message.data.value<Timestamp>());
+        break;
 
-        case Message::Type::Chat:
-            Logger::printChatMsg(message.data.toString());
-            break;
+    case Message::Type::Chat:
+        Logger::printChatMsg(message.data.toString());
+        break;
 
-        case Message::Type::URL:
-            emit urlChanged(message.data.toString());
-            break;
+    case Message::Type::URL:
+        emit urlChanged(message.data.toString());
+        break;
 
-        default:
-            Logger::printError("Received invalid message...");
+    default:
+        Logger::printError("Received invalid message...");
     }
 }

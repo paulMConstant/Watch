@@ -1,4 +1,4 @@
-#include "timestamp.h"
+#include "timestamp.h"  // NOLINT[build/include_subdir]
 
 Timestamp::Timestamp(bool paused, int timeMS) noexcept:
     paused(paused), timeMS(timeMS)

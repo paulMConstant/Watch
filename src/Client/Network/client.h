@@ -19,6 +19,7 @@ class Client : public QObject
 
     void sendTimestamp(const Timestamp& timestamp) noexcept;
     void sendChat(QString chatMessage) noexcept;
+    void sendInfo(QString info) noexcept;
     void sendURL(const QString& URL) noexcept;
     [[nodiscard]] bool isConnectedToServer() const noexcept;
 
@@ -46,9 +47,10 @@ class Client : public QObject
     quint16 msgSize = 0;
     QString name;
 
+    QString cleanHtmlString(QString str) noexcept;
     void sendName() noexcept;
     void sendMessage(const Message& message) noexcept;
     void processMessage(const Message& message) noexcept;
 };
 
-#endif // CLIENT_H
+#endif  // CLIENT_H

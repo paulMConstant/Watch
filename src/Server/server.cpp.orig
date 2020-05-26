@@ -1,4 +1,4 @@
-#include "Server/server.h"
+#include "server.h"
 
 #include <QDataStream>
 
@@ -46,7 +46,7 @@ void Server::dataReceived() noexcept
     {
         return;
     }
-    while (socket->bytesAvailable())
+    while(socket->bytesAvailable())
     {
         QDataStream in(socket);
         if (connectedClients[socket].msgSize == 0)
@@ -70,26 +70,26 @@ void Server::dataReceived() noexcept
     }
 }
 
-void Server::processMessage(const Message& message, QSslSocket* source) noexcept
+void Server::processMessage(const Message &message, QSslSocket* source) noexcept
 {
-    switch (message.type)
+    switch(message.type)
     {
-        case Message::Type::Name:
-            registerClientName(message.data.toString(), source);
-            break;
+    case Message::Type::Name:
+        registerClientName(message.data.toString(), source);
+        break;
 
-        case Message::Type::Timestamp:
-        case Message::Type::Chat:
-        case Message::Type::URL:
-            broadcast(message, source);
-            break;
+    case Message::Type::Timestamp:
+    case Message::Type::Chat:
+    case Message::Type::URL:
+        broadcast(message, source);
+        break;
 
-        default:
-            Logger::print("Received invalid message...");
+    default:
+        Logger::print("Received invalid message...");
     }
 }
 
-void Server::registerClientName(const QString& name, QSslSocket* source) noexcept
+void Server::registerClientName(const QString &name, QSslSocket *source) noexcept
 {
     Logger::print("New client or name change : " + name);
     connectedClients[source] = Client(name);
