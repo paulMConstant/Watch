@@ -78,6 +78,7 @@ void Server::processMessage(const Message& message, QSslSocket* source) noexcept
             registerClientName(message.data.toString(), source);
             break;
 
+        case Message::Type::Info:
         case Message::Type::Timestamp:
         case Message::Type::Chat:
         case Message::Type::URL:
