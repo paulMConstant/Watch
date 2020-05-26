@@ -2,4 +2,7 @@
     <qresource prefix="/certs/">
         <file alias="server_cert">../../../certs/server_cert.pem</file>
     </qresource>
+    <qresource prefix="/sounds/">
+        <file alias="chat">./percussion-sound.mp3</file>
+    </qresource>
 </RCC>

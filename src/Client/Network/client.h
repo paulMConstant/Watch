@@ -6,6 +6,7 @@
 #include <QString>
 #include <QSslError>
 #include <QList>
+#include <QMediaPlayer>
 
 #include <Messages/timestamp.h>
 #include <Messages/message.h>
@@ -46,6 +47,7 @@ class Client : public QObject
     QSslSocket* socket = new QSslSocket(this);
     quint16 msgSize = 0;
     QString name;
+    QMediaPlayer notificationPlayer;
 
     QString namedMessage(QString msg) noexcept;
     void sendName() noexcept;

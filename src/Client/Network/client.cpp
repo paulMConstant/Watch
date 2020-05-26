@@ -1,11 +1,14 @@
 #include "Network/client.h"
 
+#include <QCoreApplication>
 #include <QByteArray>
 #include <QDataStream>
 #include <QHostAddress>
 #include <QSslSocket>
 #include <QSslKey>
 #include <QSslCertificate>
+#include <QSound>
+#include <QMediaPlayer>
 
 #include <Messages/constants.h>
 #include "Logger/logger.h"
@@ -13,6 +16,7 @@
 
 Client::Client() noexcept
 {
+    notificationPlayer.setVolume(50);
     socket->addCaCertificates(":/certs/server_cert");
     connect(socket, SIGNAL(connected()), this, SLOT(onConnected()));
     connect(socket, SIGNAL(disconnected()), this, SLOT(onDisconnected()));
@@ -170,7 +174,9 @@ void Client::processMessage(const Message& message) noexcept
             break;
 
         case Message::Type::Chat:
-            // TODO play chat message sound
+            notificationPlayer.setMedia(QUrl("qrc:/sounds/chat"));
+            notificationPlayer.play();
+            [[fallthrough]];
         case Message::Type::Info:
             Logger::printBlack(message.data.toString());
             break;
