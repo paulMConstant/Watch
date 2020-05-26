@@ -9,6 +9,7 @@
 
 #include <Messages/constants.h>
 #include "Logger/logger.h"
+#include "Helpers/helpers.h"
 
 Client::Client() noexcept
 {
@@ -47,9 +48,7 @@ void Client::disconnectFromServer() noexcept
 
 void Client::sendChat(QString chatMessage) noexcept
 {
-    auto htmlName = name;
-    htmlName.replace('<', "&lt;");
-    htmlName.replace('>', "&gt;");
+    auto htmlName = Helpers::String::cleanHtml(name);
     chatMessage = "<b>" + htmlName + " :</b> " + chatMessage;
     Logger::printChatMsg(chatMessage);
     sendMessage(Message(Message::Type::Chat, chatMessage));

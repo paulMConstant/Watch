@@ -5,6 +5,7 @@
 #include "ui_networkdisplay.h"  // NOLINT[build/include_subdir]
 #include "Network/client.h"
 #include "Logger/logger.h"
+#include "Helpers/helpers.h"
 
 NetworkDisplay::NetworkDisplay(QWidget* parent) noexcept:
     QWidget(parent),
@@ -130,9 +131,7 @@ void NetworkDisplay::printUserListChanges(const QStringList& newConnectedUsers) 
 
 void NetworkDisplay::sendChatMessage() noexcept
 {
-    auto text = ui->messageLine->text();
-    text.replace('<', "&lt;");
-    text.replace('>', "&gt;");
+    const auto text = Helpers::String::cleanHtml(ui->messageLine->text());
     client->sendChat(text);
     ui->messageLine->clear();
 }

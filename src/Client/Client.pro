@@ -32,7 +32,8 @@ SOURCES += \
     Network/client.cpp \
     Logger/logger.cpp \
     HMI/Player/customsignalsmediaplayer.cpp \
-    HMI/Convenience/discreetdock.cpp
+    HMI/Convenience/discreetdock.cpp \
+    Helpers/helpers.cpp
 
 HEADERS += \
     HMI/mainwindow.h \
@@ -41,7 +42,8 @@ HEADERS += \
     Network/client.h \
     Logger/logger.h \
     HMI/Player/customsignalsmediaplayer.h \
-    HMI/Convenience/discreetdock.h
+    HMI/Convenience/discreetdock.h \
+    Helpers/helpers.h
 
 FORMS += \
     HMI/Player/player.ui \
