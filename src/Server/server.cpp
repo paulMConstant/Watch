@@ -29,8 +29,8 @@ void Server::incomingConnection(qintptr handle)
 {
     auto socket = new QSslSocket(this);
     socket->setSocketDescriptor(handle);
-    socket->setLocalCertificate(":/cert", QSsl::Pem);
-    socket->setPrivateKey(":/pkey", QSsl::Rsa, QSsl::Pem);
+    socket->setLocalCertificate(":/certs/cert", QSsl::Pem);
+    socket->setPrivateKey(":/certs/pkey", QSsl::Rsa, QSsl::Pem);
     socket->startServerEncryption();
 
     connect(socket, SIGNAL(readyRead()), this, SLOT(dataReceived()));

@@ -12,7 +12,7 @@
 
 Client::Client() noexcept
 {
-    socket->addCaCertificates(":/server_cert");
+    socket->addCaCertificates(":/certs/server_cert");
     connect(socket, SIGNAL(connected()), this, SLOT(onConnected()));
     connect(socket, SIGNAL(disconnected()), this, SLOT(onDisconnected()));
     connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(socketError()));
