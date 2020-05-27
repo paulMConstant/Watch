@@ -1,5 +1,7 @@
 #include "Server/server.h"
 
+#include <Messages/constants.h>
+
 #include <QDataStream>
 #include <QHostAddress>
 #include <QSslKey>
@@ -7,7 +9,6 @@
 
 #include <algorithm>
 
-#include <Messages/constants.h>
 #include "Logger/logger.h"
 
 Server::Server() noexcept
@@ -185,7 +186,7 @@ QSslConfiguration Server::sslConfig() const noexcept
     auto config = QSslConfiguration();
     auto certificate = QSslCertificate::fromPath(":/certs/cert");
     Q_ASSERT_X(certificate.size(), "Server::sslConfig()",
-        "No certificate found in qrc. Run /certs/create_server_certificate.sh");
+               "No certificate found in qrc. Run /certs/create_server_certificate.sh");
     config.setLocalCertificate(certificate.at(0));
     auto key = QFile(":/certs/pkey");
     key.open(QIODevice::ReadOnly);

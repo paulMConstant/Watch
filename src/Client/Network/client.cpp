@@ -100,15 +100,15 @@ void Client::onConnected() noexcept
                                           tr("Enter the server password :"),
                                           QLineEdit::Password,
                                           "", &ok);
-    if (!ok)
-    {
-        connectionACK = true;
-        disconnectFromServer();
-    }
-    else
+    if (ok)
     {
         auto hash = PasswordConventions::hash(password);
         sendMessage(Message(Message::Type::Hello, QVariant::fromValue<Hello>(Hello(hash, name))));
+    }
+    else
+    {
+        connectionACK = true;
+        disconnectFromServer();
     }
 }
 
@@ -183,7 +183,7 @@ void Client::processMessage(const Message& message) noexcept
     {
         case Message::Type::Hello:
             connectionACK = true;
-            Logger::printGreen("Connection succesful");
+            Logger::printGreen("Connection successful");
             emit connected();
             break;
 
@@ -217,7 +217,7 @@ QSslConfiguration Client::sslConfig() const noexcept
     auto config = QSslConfiguration();
     auto certificate = QSslCertificate::fromPath(":/certs/cert");
     Q_ASSERT_X(certificate.size(), "Client::sslConfig()", "No certificate found in qrc. "
-                                                       "Run /certs/create_client_certificate.sh");
+               "Run /certs/create_client_certificate.sh");
     config.setLocalCertificate(certificate.at(0));
     auto key = QFile(":/certs/pkey");
     key.open(QIODevice::ReadOnly);

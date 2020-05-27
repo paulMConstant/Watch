@@ -1,8 +1,8 @@
 #include <QApplication>
 #include <VLCQtCore/Common.h>
 
-#include "HMI/mainwindow.h"
 #include <Messages/message.h>
+#include "HMI/mainwindow.h"
 
 int main(int argc, char* argv[])
 {

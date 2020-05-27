@@ -49,20 +49,28 @@ void Password::setStdinEcho(bool enable) noexcept
     DWORD mode;
     GetConsoleMode(hStdin, &mode);
 
-    if( !enable )
-        mode &= ~ENABLE_ECHO_INPUT;
-    else
+    if (enable)
+    {
         mode |= ENABLE_ECHO_INPUT;
+    }
+    else
+    {
+        mode &= ~ENABLE_ECHO_INPUT;
+    }
 
-    SetConsoleMode(hStdin, mode );
+    SetConsoleMode(hStdin, mode);
 
 #else
     struct termios tty;
     tcgetattr(STDIN_FILENO, &tty);
-    if( !enable )
-        tty.c_lflag &= ~ECHO;
-    else
+    if (enable)
+    {
         tty.c_lflag |= ECHO;
+    }
+    else
+    {
+        tty.c_lflag &= ~ECHO;
+    }
 
     (void) tcsetattr(STDIN_FILENO, TCSANOW, &tty);
 #endif

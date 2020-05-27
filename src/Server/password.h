@@ -7,7 +7,7 @@ class Password
 {
   public:
     Password() = default;
-    Password(const QByteArray& password) noexcept;
+    Password(const QByteArray& password) noexcept;  // NOLINT [runtime/explicit]
     [[nodiscard]] bool operator==(const Password& other) const noexcept;
     void readFromUser() noexcept;
 
@@ -15,7 +15,7 @@ class Password
     QByteArray password;
 
     [[nodiscard]] QByteArray readConsole() noexcept;
-    void setStdinEcho(bool enable) noexcept;
+    static void setStdinEcho(bool enable) noexcept;
 };
 
 #endif  // PASSWORD_H

@@ -1,5 +1,5 @@
-#ifndef UNCLOSEABLE_DOCK_H
-#define UNCLOSEABLE_DOCK_H
+#ifndef DISCREETDOCK_H
+#define DISCREETDOCK_H
 
 #include <QDockWidget>
 #include <QCloseEvent>
@@ -28,4 +28,4 @@ class DiscreetDock : public QDockWidget
     void holdCount() noexcept;
 };
 
-#endif  // UNCLOSEABLE_DOCK_H
+#endif  // DISCREETDOCK_H
