@@ -137,7 +137,7 @@ void Server::send(const Message& message, QSslSocket* destination) noexcept
     destination->write(message.toByteArray());
     destination->flush();
 }
-
+#include <QDebug>
 void Server::clientDisconnected() noexcept
 {
     auto socket = qobject_cast<QSslSocket*>(sender());
@@ -145,13 +145,14 @@ void Server::clientDisconnected() noexcept
     {
         return;
     }
-    if (connectedClients[socket].authenticated)
-    {
-        sendConnectedClientsList();
-    }
+    auto userAuthenticated = connectedClients[socket].authenticated;
     Logger::print(connectedClients[socket].name + " disconnected.");
     connectedClients.remove(socket);
     socket->deleteLater();
+    if (userAuthenticated)
+    {
+        sendConnectedClientsList();
+    }
 }
 
 void Server::socketError() noexcept
