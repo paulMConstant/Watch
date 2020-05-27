@@ -13,6 +13,38 @@
   <property name="windowTitle">
    <string>Watch</string>
   </property>
+  <property name="layoutDirection">
+   <enum>Qt::LeftToRight</enum>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">/*-----QMenuBar-----*/
+QMenuBar { background-color: #F8F8F8; color: #000000; border-color: #000000; }
+QMenuBar::disabled { background-color: #404040; color: #656565; border-color: #051a39; }
+QMenuBar::item { background-color: transparent; }
+QMenuBar::item:selected { background-color: #9F2425; color: #ffffff; }
+QMenuBar::item:pressed { background-color: #9F2425; border: 1px solid #000; margin-bottom: -1px; padding-bottom: 1px; }
+
+/*-----QMenu-----*/
+QMenu { background-color: #F8F8F8; border: 1px solid; color: #000; }
+QMenu QWidget { background-color: transparent; }
+QMenu::separator { height: 1px; background-color: #6d8eff; color: #ffffff; padding-left: 4px; margin-left: 10px;  margin-right: 5px; }
+QMenu::item { min-width : 150px; padding: 3px 20px 3px 20px; }
+QMenu::item:selected { background-color: #9F2425;  color: #f0f5f3;}
+QMenu::item:disabled { color: #262626; }
+
+/*-----QSlider-----*/
+QSlider::sub-page:Horizontal { background-color: #9F2425; }
+QSlider::add-page:Horizontal { background-color: #333333; }
+QSlider::groove:Horizontal { background: transparent; height:4px; }
+QSlider::handle:Horizontal { width:10px; border-radius:5px; background:#9F2425; margin: -5px 0px -5px 0px; }
+
+/*-----QLineEdit-----*/
+QLineEdit::focus { border: 1px solid #9F2425; border-radius: 3px; }
+
+/*-----QPushButton-----*/
+QPushButton { border: 1px solid #D0D0D0; border-radius: 10px; background-color: #FEFEFE;}
+QPushButton::pressed { background-color: #D0D0D0; border-color: #D0D0D0}</string>
+  </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
     <property name="leftMargin">

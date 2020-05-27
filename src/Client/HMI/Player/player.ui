@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <property name="leftMargin">
     <number>0</number>
@@ -46,11 +49,11 @@
     <widget class="QWidget" name="bottomWidget" native="true">
      <property name="minimumSize">
       <size>
-       <width>0</width>
+       <width>20</width>
        <height>20</height>
       </size>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,10,0,2">
+     <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0,10,0,0">
       <property name="spacing">
        <number>6</number>
       </property>
@@ -64,20 +67,20 @@
        <number>9</number>
       </property>
       <property name="bottomMargin">
-       <number>9</number>
+       <number>5</number>
       </property>
       <item>
-       <widget class="QPushButton" name="playPause">
+       <widget class="QPushButton" name="backButton">
         <property name="minimumSize">
          <size>
-          <width>30</width>
-          <height>30</height>
+          <width>27</width>
+          <height>27</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>30</width>
-          <height>30</height>
+          <width>27</width>
+          <height>27</height>
          </size>
         </property>
         <property name="text">
@@ -85,7 +88,7 @@
         </property>
         <property name="icon">
          <iconset resource="../../Resources/resources.qrc">
-          <normaloff>:/icons/play</normaloff>:/icons/play</iconset>
+          <normaloff>:/icons/back</normaloff>:/icons/back</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -96,20 +99,91 @@
        </widget>
       </item>
       <item>
-       <widget class="VlcWidgetSeek" name="seek" native="true"/>
+       <widget class="QPushButton" name="playPause">
+        <property name="minimumSize">
+         <size>
+          <width>35</width>
+          <height>35</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>35</width>
+          <height>35</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="../../Resources/resources.qrc">
+          <normaloff>:/icons/play</normaloff>:/icons/play</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>27</width>
+          <height>27</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="forwardButton">
+        <property name="minimumSize">
+         <size>
+          <width>27</width>
+          <height>27</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>27</width>
+          <height>27</height>
+         </size>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="../../Resources/resources.qrc">
+          <normaloff>:/icons/forward</normaloff>:/icons/forward</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>20</width>
+          <height>20</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="VlcWidgetSeek" name="seek" native="true">
+        <property name="autoFillBackground">
+         <bool>false</bool>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QSlider
+{
+	color:red;
+}</string>
+        </property>
+       </widget>
       </item>
       <item>
        <widget class="QLabel" name="volumeIcon">
         <property name="minimumSize">
          <size>
-          <width>16</width>
-          <height>16</height>
+          <width>22</width>
+          <height>22</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>16</width>
-          <height>16</height>
+          <width>22</width>
+          <height>22</height>
          </size>
         </property>
         <property name="text">
@@ -125,6 +199,9 @@
       </item>
       <item>
        <widget class="QSlider" name="volumeSlider">
+        <property name="maximum">
+         <number>100</number>
+        </property>
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>

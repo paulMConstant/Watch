@@ -28,12 +28,12 @@ class Player : public QWidget
     [[nodiscard]] bool hasMedia() const noexcept;
 
     void setClient(Client* client) noexcept;
-    void goForward() noexcept;
-    void goBack() noexcept;
 
   public slots:
     void showUI() noexcept;
     void hideUI() noexcept;
+    void goForward() noexcept;
+    void goBack() noexcept;
     void togglePause() noexcept;
     void askOpenFile() noexcept;
     void askOpenURL() noexcept;

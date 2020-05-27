@@ -10,6 +10,8 @@
     <qresource prefix="/icons">
         <file alias="play">play.png</file>
         <file alias="pause">pause.png</file>
+        <file alias="forward">forward.png</file>
+        <file alias="back">back.png</file>
         <file alias="volume3">volume3.png</file>
         <file alias="volume2">volume2.png</file>
         <file alias="volume1">volume1.png</file>

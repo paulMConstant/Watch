@@ -33,6 +33,9 @@ Player::Player(QWidget* parent) noexcept :
 
     connect(ui->volumeSlider, SIGNAL(valueChanged(int)), this, SLOT(updateVolume(int)));
     connect(ui->playPause, SIGNAL(clicked(bool)), this, SLOT(togglePause()));
+    connect(ui->forwardButton, SIGNAL(clicked(bool)), this, SLOT(goForward()));
+    connect(ui->backButton, SIGNAL(clicked(bool)), this, SLOT(goBack()));
+
     connect(player, SIGNAL(manualActionTriggered()), this, SLOT(sendTimestamp()));
     connect(player, SIGNAL(timeChanged(int)), this, SLOT(stopVideoIfEnded()));
     ui->volumeSlider->setValue(50);
