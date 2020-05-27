@@ -6,7 +6,9 @@
 class Password
 {
   public:
-    [[nodiscard]] bool equals(const QByteArray& other) noexcept;
+    Password() = default;
+    Password(const QByteArray& password) noexcept;
+    [[nodiscard]] bool operator==(const Password& other) const noexcept;
     void readFromUser() noexcept;
 
   private:

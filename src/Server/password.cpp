@@ -11,9 +11,14 @@
 
 #include <Messages/passwordconventions.h>
 
-bool Password::equals(const QByteArray& other) noexcept
+Password::Password(const QByteArray& password) noexcept :
+    password(password)
 {
-    return (password.size() == 0 || other == password);
+}
+
+bool Password::operator==(const Password& other) const noexcept
+{
+    return (other.password == password);
 }
 
 void Password::readFromUser() noexcept

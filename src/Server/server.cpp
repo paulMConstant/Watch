@@ -95,7 +95,7 @@ void Server::processMessage(const Message& message, QSslSocket* source) noexcept
 void Server::registerClient(const Hello& hello, QSslSocket* source) noexcept
 {
     Logger::print("New connection : " + hello.name);
-    if (password.equals(hello.password))
+    if (password == hello.password)
     {
         Logger::print("Authentication succesful : " + hello.name);
         connectedClients[source] = Client(hello.name, true);
@@ -137,7 +137,7 @@ void Server::send(const Message& message, QSslSocket* destination) noexcept
     destination->write(message.toByteArray());
     destination->flush();
 }
-#include <QDebug>
+
 void Server::clientDisconnected() noexcept
 {
     auto socket = qobject_cast<QSslSocket*>(sender());
