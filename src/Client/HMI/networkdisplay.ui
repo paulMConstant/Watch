@@ -98,7 +98,7 @@
           <widget class="QPushButton" name="connectButton">
            <property name="minimumSize">
             <size>
-             <width>75</width>
+             <width>90</width>
              <height>25</height>
             </size>
            </property>
