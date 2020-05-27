@@ -7,4 +7,8 @@
     <qresource prefix="/sounds/">
         <file alias="chat">./percussion-sound.mp3</file>
     </qresource>
+    <qresource prefix="/icons/">
+        <file alias="play">./play.png</file>
+        <file alias="pause">./pause.png</file>
+    </qresource>
 </RCC>

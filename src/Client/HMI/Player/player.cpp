@@ -155,7 +155,7 @@ void Player::playFile(const QString& file) noexcept
     auto local = currentFileIsLocal();
     media = new VlcMedia(currentFile, local, instance);
     player->open(media);
-    ui->playPause->setText("Pause");
+    ui->playPause->setIcon(QIcon(":/icons/pause"));
     auto filename = currentFile;
     if (local)
     {
@@ -213,7 +213,7 @@ void Player::pause(bool sendSignal) noexcept
     {
         player->noSignalPause();
     }
-    ui->playPause->setText("Play");
+    ui->playPause->setIcon(QIcon(":/icons/play"));
 }
 
 void Player::play(bool sendSignal) noexcept
@@ -230,7 +230,7 @@ void Player::play(bool sendSignal) noexcept
     {
         player->noSignalPlay();
     }
-    ui->playPause->setText("Pause");
+    ui->playPause->setIcon(QIcon(":/icons/pause"));
 }
 
 void Player::stopVideoIfEnded() noexcept
