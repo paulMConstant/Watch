@@ -50,9 +50,9 @@
        <height>20</height>
       </size>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout">
+     <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,10,0,2">
       <property name="spacing">
-       <number>2</number>
+       <number>6</number>
       </property>
       <property name="leftMargin">
        <number>0</number>
@@ -96,56 +96,39 @@
        </widget>
       </item>
       <item>
-       <widget class="VlcWidgetSeek" name="seek" native="true">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
+       <widget class="VlcWidgetSeek" name="seek" native="true"/>
+      </item>
+      <item>
+       <widget class="QLabel" name="volumeIcon">
+        <property name="minimumSize">
+         <size>
+          <width>16</width>
+          <height>16</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16</width>
+          <height>16</height>
+         </size>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="pixmap">
+         <pixmap resource="../../Resources/resources.qrc">:/icons/volume2</pixmap>
+        </property>
+        <property name="scaledContents">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout">
-        <property name="spacing">
-         <number>1</number>
+       <widget class="QSlider" name="volumeSlider">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
         </property>
-        <item>
-         <widget class="VlcWidgetVolumeSlider" name="volume" native="true">
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>50</height>
-           </size>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="volumeIcon">
-          <property name="minimumSize">
-           <size>
-            <width>16</width>
-            <height>16</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16</width>
-            <height>16</height>
-           </size>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-          <property name="pixmap">
-           <pixmap resource="../../Resources/resources.qrc">:/icons/volume2</pixmap>
-          </property>
-          <property name="scaledContents">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-       </layout>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -161,17 +144,6 @@
    <slots>
     <signal>fullscreen()</signal>
     <slot>toggleFullscreen()</slot>
-   </slots>
-  </customwidget>
-  <customwidget>
-   <class>VlcWidgetVolumeSlider</class>
-   <extends>QWidget</extends>
-   <header location="global">VLCQtWidgets/WidgetVolumeSlider.h</header>
-   <container>1</container>
-   <slots>
-    <slot>mute()</slot>
-    <slot>volumeUp()</slot>
-    <slot>volumeDown()</slot>
    </slots>
   </customwidget>
   <customwidget>

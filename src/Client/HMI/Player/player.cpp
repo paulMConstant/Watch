@@ -5,8 +5,10 @@
 #include <QFileDialog>
 #include <QInputDialog>
 #include <QFile>
+#include <QSlider>
 
 #include <VLCQtCore/Common.h>
+#include <VLCQtCore/Audio.h>
 #include <VLCQtCore/Instance.h>
 #include <VLCQtCore/Media.h>
 #include <VLCQtCore/Enums.h>
@@ -27,13 +29,13 @@ Player::Player(QWidget* parent) noexcept :
     ui->video->installEventFilter(this);
 
     ui->video->setMediaPlayer(player);
-    ui->volume->setMediaPlayer(player);
-    ui->volume->setVolume(50);
     ui->seek->setMediaPlayer(player);
-    connect(ui->volume, SIGNAL(newVolume(int)), this, SLOT(updateVolumeIcon(int)));
+
+    connect(ui->volumeSlider, SIGNAL(valueChanged(int)), this, SLOT(updateVolume(int)));
     connect(ui->playPause, SIGNAL(clicked(bool)), this, SLOT(togglePause()));
     connect(player, SIGNAL(manualActionTriggered()), this, SLOT(sendTimestamp()));
     connect(player, SIGNAL(timeChanged(int)), this, SLOT(stopVideoIfEnded()));
+    ui->volumeSlider->setValue(50);
 }
 
 Player::~Player() noexcept
@@ -169,7 +171,7 @@ bool Player::currentFileIsLocal() noexcept
     return QFile::exists(currentFile);
 }
 
-void Player::updateVolumeIcon(int volume) noexcept
+void Player::updateVolume(int volume) noexcept
 {
     auto iconPath = QString();
     if (volume == 0)
@@ -189,6 +191,7 @@ void Player::updateVolumeIcon(int volume) noexcept
         iconPath = ":/icons/volume3";
     }
     ui->volumeIcon->setPixmap(QPixmap(iconPath));
+    player->audio()->setVolume(volume);
 }
 
 void Player::sendTimestamp() noexcept
