@@ -30,7 +30,7 @@ Player::Player(QWidget* parent) noexcept :
     ui->volume->setMediaPlayer(player);
     ui->volume->setVolume(50);
     ui->seek->setMediaPlayer(player);
-
+    connect(ui->volume, SIGNAL(newVolume(int)), this, SLOT(updateVolumeIcon(int)));
     connect(ui->playPause, SIGNAL(clicked(bool)), this, SLOT(togglePause()));
     connect(player, SIGNAL(manualActionTriggered()), this, SLOT(sendTimestamp()));
     connect(player, SIGNAL(timeChanged(int)), this, SLOT(stopVideoIfEnded()));
@@ -168,6 +168,29 @@ bool Player::currentFileIsLocal() noexcept
 {
     return QFile::exists(currentFile);
 }
+
+void Player::updateVolumeIcon(int volume) noexcept
+{
+    auto iconPath = QString();
+    if (volume == 0)
+    {
+        iconPath = ":/icons/volume0";
+    }
+    else if (volume < 33)
+    {
+        iconPath = ":/icons/volume1";
+    }
+    else if (volume < 67)
+    {
+        iconPath = ":/icons/volume2";
+    }
+    else
+    {
+        iconPath = ":/icons/volume3";
+    }
+    ui->volumeIcon->setPixmap(QPixmap(iconPath));
+}
+
 void Player::sendTimestamp() noexcept
 {
     auto timestamp = Timestamp(player->isPaused(), player->time());

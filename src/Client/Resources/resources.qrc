@@ -1,14 +1,18 @@
 <RCC>
-    <qresource prefix="/certs/">
+    <qresource prefix="/certs">
         <file alias="cert">../../../certs/client_cert.pem</file>
         <file alias="pkey">../../../certs/client_pkey.pem</file>
         <file alias="server_cert">../../../certs/server_cert.pem</file>
     </qresource>
-    <qresource prefix="/sounds/">
-        <file alias="chat">./percussion-sound.mp3</file>
+    <qresource prefix="/sounds">
+        <file alias="chat">percussion-sound.mp3</file>
     </qresource>
-    <qresource prefix="/icons/">
-        <file alias="play">./play.png</file>
-        <file alias="pause">./pause.png</file>
+    <qresource prefix="/icons">
+        <file alias="play">play.png</file>
+        <file alias="pause">pause.png</file>
+        <file alias="volume3">volume3.png</file>
+        <file alias="volume2">volume2.png</file>
+        <file alias="volume1">volume1.png</file>
+        <file alias="volume0">volume0.png</file>
     </qresource>
 </RCC>

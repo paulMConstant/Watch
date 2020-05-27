@@ -44,6 +44,7 @@ class Player : public QWidget
     bool eventFilter(QObject* object, QEvent* event) noexcept;
 
   private slots:
+    void updateVolumeIcon(int volume) noexcept;
     void sendTimestamp() noexcept;
     void stopVideoIfEnded() noexcept;
     void receiveTimestamp(const Timestamp& timestamp) noexcept;
