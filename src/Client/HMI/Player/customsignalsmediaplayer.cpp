@@ -15,13 +15,13 @@ bool CustomSignalsMediaPlayer::isPaused() const noexcept
 
 bool CustomSignalsMediaPlayer::videoIsPlayable() const noexcept
 {
-    return timeIsPlayable(time());
+    return currentMedia() != nullptr && timeIsPlayable(time());
 }
 
 bool CustomSignalsMediaPlayer::timeIsPlayable(int timeMS) const noexcept
 {
     constexpr auto msToEnd = 300;
-    return (currentMedia() != nullptr && (timeMS < currentMedia()->duration() - msToEnd));
+    return currentMedia() != nullptr && (timeMS < currentMedia()->duration() - msToEnd);
 }
 
 void CustomSignalsMediaPlayer::noSignalSetTime(int timeMS)
