@@ -29,7 +29,7 @@ void Password::readFromUser() noexcept
         out << "Enter the server password :";
         out.flush();
         auto passwordEntry = readConsole();
-        out << "\nEnter the server password again :";
+        out << "\nVerify entered password :";
         out.flush();
         if (readConsole() == passwordEntry)
         {
