@@ -142,12 +142,18 @@ void Client::socketError() noexcept
 
 void Client::sslError(QList<QSslError> errors) noexcept
 {
+    auto error = errors.takeFirst();
+    if (error.error() == QSslError::HostNameMismatch)
+    {
+        // Error is safe to ignore. Server identity is not verified.
+        return;
+    }
+
     disconnectFromServer();
     if (errors.empty())
     {
         return;
     }
-    auto error = errors.takeFirst();
     Logger::printRed("Ssl error : " + error.errorString());
 }
 
@@ -223,8 +229,7 @@ QSslConfiguration Client::sslConfig() const noexcept
     key.open(QIODevice::ReadOnly);
     config.setPrivateKey(QSslKey(key.readAll(), QSsl::Rsa));
     key.close();
-    config.setPeerVerifyMode(QSslSocket::VerifyPeer);
-    config.setCaCertificates(QSslCertificate::fromPath(":/certs/server_cert"));
+    config.setPeerVerifyMode(QSslSocket::VerifyNone);
     return config;
 }
 
