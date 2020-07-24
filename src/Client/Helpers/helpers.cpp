@@ -4,5 +4,5 @@ QString Helpers::String::cleanHtml(QString str) noexcept
 {
     str.replace('<', "&lt;");
     str.replace('>', "&gt;");
-    return str;
+    return str.trimmed();
 }

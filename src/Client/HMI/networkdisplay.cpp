@@ -132,6 +132,10 @@ void NetworkDisplay::printUserListChanges(const QStringList& newConnectedUsers) 
 void NetworkDisplay::sendChatMessage() noexcept
 {
     const auto text = Helpers::String::cleanHtml(ui->messageLine->text());
+    if (text.isEmpty())
+    {
+        return;
+    }
     client->sendChat(text);
     ui->messageLine->clear();
 }
