@@ -2,6 +2,7 @@
 
 #include <QDebug>
 #include <QTime>
+#include <QTextCursor>
 
 namespace
 {
@@ -15,8 +16,8 @@ void print(const QString& msg, const QColor& color) noexcept
         return;
     }
     const auto timeStamp = '[' + QTime::currentTime().toString("hh:mm:ss") + "] ";
+    msgList->moveCursor(QTextCursor::End);
     msgList->insertHtml("<font color=\"" + color.name() + "\">" + timeStamp + msg + "</font><br>");
-    msgList->textCursor().movePosition(QTextCursor::End);
 }
 }  // namespace
 
