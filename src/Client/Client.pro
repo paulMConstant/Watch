@@ -57,7 +57,8 @@ LIBS        += -lVLCQtCore -lVLCQtWidgets # dynamic libs
 DESTDIR = bin
 
 unix:{
-    QMAKE_LFLAGS += "-Wl,-rpath,\'\$$ORIGIN\'"
+#https://stackoverflow.com/questions/36117748/qt-linux-gcc-wl-rpath-origin-not-working-for-platform-plugin-xcb
+    QMAKE_LFLAGS += "-Wl,-rpath,\'\$$ORIGIN/lib\'"
 }
 
 RESOURCES += \
