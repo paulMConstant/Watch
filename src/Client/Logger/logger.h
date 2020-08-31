@@ -7,9 +7,12 @@
 namespace Logger
 {
 void init(QTextEdit* outputList) noexcept;
+
 void printGreen(const QString& msg) noexcept;
 void printRed(const QString& msg) noexcept;
 void printBlack(const QString& msg) noexcept;
+
+void playChatSound() noexcept;
 }  // namespace Logger
 
 #endif  // LOGGER_H

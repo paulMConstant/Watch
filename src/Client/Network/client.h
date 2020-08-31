@@ -7,7 +7,6 @@
 #include <QSslError>
 #include <QSslConfiguration>
 #include <QList>
-#include <QMediaPlayer>
 
 #include <Messages/timestamp.h>
 #include <Messages/message.h>
@@ -48,7 +47,6 @@ class Client : public QObject
     QSslSocket* socket = new QSslSocket(this);
     quint16 msgSize = 0;
     QString name;
-    QMediaPlayer notificationPlayer;
     bool connectionACK = false;
 
     QString namedMessage(QString msg) const noexcept;

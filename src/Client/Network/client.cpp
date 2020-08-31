@@ -16,7 +16,6 @@
 
 Client::Client()
 {
-    notificationPlayer.setVolume(50);
     socket->setSslConfiguration(sslConfig());
 
     connect(socket, SIGNAL(connected()), this, SLOT(onConnected()));
@@ -202,8 +201,7 @@ void Client::processMessage(const Message& message) noexcept
             break;
 
         case Message::Type::Chat:
-            notificationPlayer.setMedia(QUrl("qrc:/sounds/chat"));
-            notificationPlayer.play();
+            Logger::playChatSound();
             [[fallthrough]];
         case Message::Type::Info:
             Logger::printBlack(message.data.toString());

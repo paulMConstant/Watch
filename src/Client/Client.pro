@@ -8,7 +8,7 @@ QT       += core gui network multimedia
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = Client
+TARGET = Watch
 TEMPLATE = app
 CONFIG += c++1z
 

@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <QTime>
 #include <QTextCursor>
+#include <QSound>
 
 namespace
 {
@@ -39,4 +40,9 @@ void Logger::printGreen(const QString& msg) noexcept
 void Logger::printBlack(const QString& msg) noexcept
 {
     print(msg, Qt::black);
+}
+
+void Logger::playChatSound() noexcept
+{
+    QSound::play("qrc:/sounds/chat");
 }

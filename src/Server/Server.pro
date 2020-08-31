@@ -1,6 +1,8 @@
 QT -= gui
 QT += network
 
+TARGET = WatchServer
+
 CONFIG += c++1z console
 CONFIG -= app_bundle
 

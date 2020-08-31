@@ -4,7 +4,7 @@
         <file alias="pkey">../../../certs/client_pkey.pem</file>
     </qresource>
     <qresource prefix="/sounds">
-        <file alias="chat">percussion-sound.mp3</file>
+        <file alias="chat">percussion-sound.wav</file>
     </qresource>
     <qresource prefix="/icons">
         <file alias="play">play.png</file>
