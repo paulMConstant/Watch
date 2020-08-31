@@ -25,6 +25,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += \
+    Global/global.cpp \
     main.cpp \
     HMI/mainwindow.cpp \
     HMI/Player/player.cpp \
@@ -36,6 +37,7 @@ SOURCES += \
     Helpers/helpers.cpp
 
 HEADERS += \
+    Global/global.h \
     HMI/mainwindow.h \
     HMI/Player/player.h \
     HMI/networkdisplay.h \
@@ -64,3 +66,4 @@ unix:{
 RESOURCES += \
     Resources/resources.qrc
 
+win32:RC_ICONS += ./Resources/logo.ico

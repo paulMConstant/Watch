@@ -7,6 +7,8 @@
         <file alias="chat">percussion-sound.wav</file>
     </qresource>
     <qresource prefix="/icons">
+        <file alias="logo.png">logo.png</file>
+        <file alias="logo.ico">logo.ico</file>
         <file alias="play">play.png</file>
         <file alias="pause">pause.png</file>
         <file alias="forward">forward.png</file>
