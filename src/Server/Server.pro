@@ -31,5 +31,9 @@ HEADERS += \
 LIBS += -lWatchMessages
 INCLUDEPATH += $$PWD/../
 
+unix:{
+    QMAKE_LFLAGS += "-Wl,-rpath,\'\$$ORIGIN/lib\'"
+}
+
 RESOURCES += \
     Resources/resources.qrc
