@@ -28,8 +28,18 @@ HEADERS += \
     server.h \
     Logger/logger.h
 
+unix:{
 LIBS += -lWatchMessages
+}
+win32:{
+CONFIG(debug, debug|release):LIBS += $$OUT_PWD/../Messages/debug/WatchMessages.lib
+CONFIG(release, debug|release):LIBS += $$OUT_PWD/../Messages/release/WatchMessages.lib
+}
+
 INCLUDEPATH += $$PWD/../
+
+win32:CONFIG(debug, debug|release):OBJECTS_DIR = $$OUT_PWD/debug
+win32:CONFIG(release, debug|release):OBJECTS_DIR = $$OUT_PWD/release
 
 RESOURCES += \
     Resources/resources.qrc
