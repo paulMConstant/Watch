@@ -41,5 +41,9 @@ INCLUDEPATH += $$PWD/../
 win32:CONFIG(debug, debug|release):OBJECTS_DIR = $$OUT_PWD/debug
 win32:CONFIG(release, debug|release):OBJECTS_DIR = $$OUT_PWD/release
 
+unix:{
+    QMAKE_LFLAGS += "-Wl,-rpath,\'\$$ORIGIN/lib\'"
+}
+
 RESOURCES += \
     Resources/resources.qrc
