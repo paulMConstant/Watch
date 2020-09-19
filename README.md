@@ -8,10 +8,9 @@ Synchronizes players which run local videos.
 + Features a chat as well.
 
 ## Requirements
-+ VLC media player
-+ Qt5 network, multimedia, core and gui dynamic libraries (built-in on most Linux distros)
++ VLC media player on linux
 
-Tested on Ubuntu 18.04.
+Tested on Ubuntu 18.04 and Windows 10.
 
 ## Before compiling
 Run *certs/create_client_certificate.sh* and *certs/create_server_certificate.sh* to generate SSL certificates.
@@ -28,6 +27,8 @@ Set up your network (NAT/firewall) and let it run on your machine.
 The server will synchronize the timestamps and play/pauses of all client applications.
 
 The local videos must be present on disk for each user (only timestamp info is sent).
+
+On Windows, allow the app to communicate in your firewall.
 
 *TODO : stream from one PC to the others*
 
