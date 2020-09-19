@@ -37,6 +37,9 @@ class NetworkDisplay : public QWidget
     QStringList lastConnectedUsers;
 
     void printUserListChanges(const QStringList& newConnectedUsers) noexcept;
+
+    static constexpr auto userNameSettingsKey {"Name"};
+    static constexpr auto serverNameSettingsKey {"Server"};
 };
 
 #endif  // NETWORKDISPLAY_H

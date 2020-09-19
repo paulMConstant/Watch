@@ -6,6 +6,7 @@
 #include "Network/client.h"
 #include "Logger/logger.h"
 #include "Helpers/helpers.h"
+#include "Global/global.h"
 
 NetworkDisplay::NetworkDisplay(QWidget* parent) noexcept:
     QWidget(parent),
@@ -17,22 +18,23 @@ NetworkDisplay::NetworkDisplay(QWidget* parent) noexcept:
     connect(ui->nameLine, SIGNAL(returnPressed()), SLOT(setFocus()));
     qApp->installEventFilter(this);
 
-    QSettings settings("Paul Constant", "Watch");
-    if (settings.allKeys().contains("Name"))
+
+    auto settings {Global::appSettings()};
+    if (settings.allKeys().contains(userNameSettingsKey))
     {
-        ui->nameLine->setText(settings.value("Name").toString());
+        ui->nameLine->setText(settings.value(userNameSettingsKey).toString());
     }
-    if (settings.allKeys().contains("Server"))
+    if (settings.allKeys().contains(serverNameSettingsKey))
     {
-        ui->serverLine->setText(settings.value("Server").toString());
+        ui->serverLine->setText(settings.value(serverNameSettingsKey).toString());
     }
 }
 
 NetworkDisplay::~NetworkDisplay()
 {
-    QSettings settings("Paul Constant", "Watch");
-    settings.setValue("Name", ui->nameLine->text());
-    settings.setValue("Server", ui->serverLine->text());
+    auto settings {Global::appSettings()};
+    settings.setValue(userNameSettingsKey, ui->nameLine->text());
+    settings.setValue(serverNameSettingsKey, ui->serverLine->text());
     delete ui;
 }
 
@@ -59,6 +61,7 @@ void NetworkDisplay::changeName() noexcept
     ui->nameLine->setText(name);
     client->setName(name);
 }
+
 void NetworkDisplay::onDisconnected() noexcept
 {
     ui->connectedUsersList->clear();
