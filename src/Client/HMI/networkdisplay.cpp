@@ -118,7 +118,7 @@ void NetworkDisplay::printUserListChanges(const QStringList& newConnectedUsers) 
     {
         if (lastConnectedUsers.contains(user) == false)
         {
-            Logger::printBlack("<i>" + user + " joined the room.</i>");
+            Logger::printBlack("<i>" + Helpers::String::cleanHtml(user) + " joined the room.</i>");
         }
         else
         {
