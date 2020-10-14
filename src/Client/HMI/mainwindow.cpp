@@ -78,7 +78,9 @@ bool MainWindow::eventFilter(QObject* object, QEvent* event)
     if (event->type() == QEvent::MouseMove)
     {
         showUI();
-        if (isFullScreen() && ui->player->underMouse())
+        if (isFullScreen()
+            && ui->player->underMouse()
+            && ui->player->bottomWidget()->underMouse() == false)
         {
             hideUITimer.start(hideDelayMS);
         }

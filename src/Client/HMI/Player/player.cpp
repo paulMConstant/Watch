@@ -54,6 +54,11 @@ bool Player::hasMedia() const noexcept
     return player->currentMedia() != nullptr;
 }
 
+const QWidget* const Player::bottomWidget() const noexcept
+{
+    return ui->bottomWidget;
+}
+
 void Player::setClient(Client* client) noexcept
 {
     this->client = client;

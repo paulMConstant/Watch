@@ -26,7 +26,7 @@ class Player : public QWidget
     ~Player() noexcept;
 
     [[nodiscard]] bool hasMedia() const noexcept;
-
+    [[nodiscard]] const QWidget* const bottomWidget() const noexcept;
     void setClient(Client* client) noexcept;
 
   public slots:
