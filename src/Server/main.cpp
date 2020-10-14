@@ -8,6 +8,6 @@ int main(int argc, char* argv[])
 {
     QCoreApplication a(argc, argv);
     Message::registerMetatypes();
-    auto server = Server();
+    Server server;
     return a.exec();
 }

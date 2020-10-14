@@ -23,7 +23,7 @@ bool Password::operator==(const Password& other) const noexcept
 
 void Password::readFromUser() noexcept
 {
-    auto out = QTextStream(stdout);
+    QTextStream out(stdout);
     for (;;)
     {
         out << "Enter the server password :";
@@ -78,7 +78,7 @@ void Password::setStdinEcho(bool enable) noexcept
 
 QByteArray Password::readConsole() noexcept
 {
-    auto in = QTextStream(stdin);
+    QTextStream in(stdin);
     setStdinEcho(false);
     auto passwordEntry = PasswordConventions::hash(in.readLine());
     setStdinEcho(true);

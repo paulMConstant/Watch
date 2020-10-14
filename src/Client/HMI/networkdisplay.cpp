@@ -19,7 +19,7 @@ NetworkDisplay::NetworkDisplay(QWidget* parent) noexcept:
     qApp->installEventFilter(this);
 
 
-    auto settings {Global::appSettings()};
+    QSettings settings(Global::organizationName, Global::appName);
     if (settings.allKeys().contains(userNameSettingsKey))
     {
         ui->nameLine->setText(settings.value(userNameSettingsKey).toString());
@@ -32,7 +32,7 @@ NetworkDisplay::NetworkDisplay(QWidget* parent) noexcept:
 
 NetworkDisplay::~NetworkDisplay()
 {
-    auto settings {Global::appSettings()};
+    QSettings settings(Global::organizationName, Global::appName);
     settings.setValue(userNameSettingsKey, ui->nameLine->text());
     settings.setValue(serverNameSettingsKey, ui->serverLine->text());
     delete ui;

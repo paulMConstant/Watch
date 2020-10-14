@@ -6,14 +6,14 @@
 
 void Logger::print(const QString& msg) noexcept
 {
-    auto outConsole = QTextStream(stdout);
+    QTextStream outConsole(stdout); 
     const auto timestamp = '[' + QTime::currentTime().toString("hh:mm:ss") + "] ";
     outConsole << timestamp << msg;
     Qt::endl(outConsole);
 
-    auto logFile = QFile(QDir::current().path() + "/logs.txt");
+    QFile logFile(QDir::current().path() + "/logs.txt");
     logFile.open(QIODevice::Append);
-    auto outFile = QTextStream(&logFile);
+    QTextStream outFile(&logFile);
     outFile << timestamp << msg;
     Qt::endl(outFile);
 }

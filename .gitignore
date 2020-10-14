@@ -32,8 +32,10 @@
 *.out
 *.app
 
-# Qt build folders
-build-*/
+# Build folders
+build*/
+Debug/
+Release/
 
 # Qt .user
 *.pro.user*
@@ -43,3 +45,18 @@ build-*/
 
 # Certificates
 *.pem
+
+# Logs
+logs*.txt
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+compile_commands.json
+
+# Hidden folders
+.ccls*/
+.clangd
+
+# Tags
+tags

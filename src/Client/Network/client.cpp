@@ -223,7 +223,7 @@ QSslConfiguration Client::sslConfig() const noexcept
     Q_ASSERT_X(certificate.size(), "Client::sslConfig()", "No certificate found in qrc. "
                "Run /certs/create_client_certificate.sh");
     config.setLocalCertificate(certificate.at(0));
-    auto key = QFile(":/certs/pkey");
+    QFile key(":/certs/pkey");
     key.open(QIODevice::ReadOnly);
     config.setPrivateKey(QSslKey(key.readAll(), QSsl::Rsa));
     key.close();

@@ -14,8 +14,3 @@ void Global::setupIcons() noexcept
     QGuiApplication::setWindowIcon(QIcon(":/icons/logo.png"));
 #endif
 }
-
-QSettings Global::appSettings() noexcept
-{
-    return QSettings(organizationName, appName);
-}
