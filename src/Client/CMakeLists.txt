@@ -48,5 +48,11 @@ set(HEADERS
     Network/client.h
     )
 
-add_executable(Watch ${SRCS} ${HEADERS})
+set(UIS
+    HMI/mainwindow.ui
+    HMI/Player/player.ui
+    HMI/networkdisplay.ui
+    )
+
+add_executable(Watch ${SRCS} ${HEADERS} ${UIS})
 target_link_libraries(Watch WatchMessages Qt5::Gui Qt5::Widgets Qt5::Core Qt5::Multimedia Qt5::Network VLCQtCore VLCQtWidgets)
