@@ -37,8 +37,8 @@ build*/
 Debug/
 Release/
 
-# Qt .user
-*.pro.user*
+# .user
+*.user*
 
 # Qt moc files
 *moc_*
