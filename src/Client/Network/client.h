@@ -47,7 +47,7 @@ class Client : public QObject
     QSslSocket* socket = new QSslSocket(this);
     quint16 msgSize = 0;
     QString name;
-    bool connectionACK = false;
+    bool waitingForPasswordACK = false;
 
     QString namedMessage(QString msg) const noexcept;
     void sendMessage(const Message& message) noexcept;

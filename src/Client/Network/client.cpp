@@ -103,10 +103,10 @@ void Client::onConnected() noexcept
     {
         auto hash = PasswordConventions::hash(password);
         sendMessage(Message(Message::Type::Hello, QVariant::fromValue<Hello>(Hello(hash, name))));
+        waitingForPasswordACK = true;
     }
     else
     {
-        connectionACK = true;
         disconnectFromServer();
     }
 }
@@ -122,15 +122,15 @@ void Client::sendMessage(const Message& message) noexcept
 
 void Client::onDisconnected() noexcept
 {
-    if (connectionACK)
-    {
-        Logger::printGreen("Disconnected.");
-    }
-    else
+    if (waitingForPasswordACK)
     {
         Logger::printRed("Invalid password.");
     }
-    connectionACK = false;
+    else
+    {
+        Logger::printGreen("Disconnected.");
+    }
+    waitingForPasswordACK = false;
     emit disconnected();
 }
 
@@ -187,8 +187,8 @@ void Client::processMessage(const Message& message) noexcept
     switch (message.type)
     {
         case Message::Type::Hello:
-            connectionACK = true;
             Logger::printGreen("Connection successful");
+            waitingForPasswordACK = false;
             emit connected();
             break;
 
