@@ -7,6 +7,7 @@
 #include <QSslCertificate>
 #include <QInputDialog>
 #include <QFile>
+#include <QtGlobal>
 
 #include <Messages/constants.h>
 #include <Messages/hello.h>
@@ -18,11 +19,12 @@ Client::Client()
 {
     socket->setSslConfiguration(sslConfig());
 
-    connect(socket, SIGNAL(connected()), this, SLOT(onConnected()));
-    connect(socket, SIGNAL(disconnected()), this, SLOT(onDisconnected()));
-    connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(socketError()));
-    connect(socket, SIGNAL(sslErrors(QList<QSslError>)), this, SLOT(sslError(QList<QSslError>)));
-    connect(socket, SIGNAL(readyRead()), this, SLOT(dataReceived()));
+    connect(socket, &QSslSocket::connected, this, &Client::onConnected);
+    connect(socket, &QSslSocket::disconnected, this, &Client::onDisconnected);
+    connect(socket, qOverload<>(&QSslSocket::error), this, &Client::socketError);
+    connect(socket, qOverload<const QList<QSslError>&>(&QSslSocket::sslErrors),
+            this, &Client::sslErrors);
+    connect(socket, &QSslSocket::readyRead, this, &Client::dataReceived);
 }
 
 Client::~Client() noexcept
@@ -33,7 +35,13 @@ Client::~Client() noexcept
 
 bool Client::isConnectedToServer() const noexcept
 {
-    return (socket->state() == QSslSocket::ConnectedState);
+    return state == State::Connected;
+}
+
+bool Client::isConnectingToServer() const noexcept
+{
+    return state == State::TryingToConnect || state == State::WaitingForPasswordACK; 
+
 }
 
 void Client::connectToServer(const QString& IP) noexcept
@@ -43,11 +51,20 @@ void Client::connectToServer(const QString& IP) noexcept
         disconnectFromServer();
     }
     socket->connectToHostEncrypted(IP, Constants::port);
+    state = State::TryingToConnect;
+    emit connecting();
 }
 
 void Client::disconnectFromServer() noexcept
 {
     socket->disconnectFromHost();
+}
+
+void Client::cancelConnecting() noexcept
+{
+    socket->disconnectFromHost();
+    state = State::Unconnected;
+    emit disconnected();
 }
 
 void Client::sendTimestamp(const Timestamp& timestamp) noexcept
@@ -103,7 +120,7 @@ void Client::onConnected() noexcept
     {
         auto hash = PasswordConventions::hash(password);
         sendMessage(Message(Message::Type::Hello, QVariant::fromValue<Hello>(Hello(hash, name))));
-        waitingForPasswordACK = true;
+        state = State::WaitingForPasswordACK;
     }
     else
     {
@@ -122,7 +139,7 @@ void Client::sendMessage(const Message& message) noexcept
 
 void Client::onDisconnected() noexcept
 {
-    if (waitingForPasswordACK)
+    if (state == State::WaitingForPasswordACK)
     {
         Logger::printRed("Invalid password.");
     }
@@ -130,7 +147,7 @@ void Client::onDisconnected() noexcept
     {
         Logger::printGreen("Disconnected.");
     }
-    waitingForPasswordACK = false;
+    state = State::Unconnected;
     emit disconnected();
 }
 
@@ -139,7 +156,7 @@ void Client::socketError() noexcept
     Logger::printRed("Socket error : " + socket->errorString());
 }
 
-void Client::sslError(QList<QSslError> errors) noexcept
+void Client::sslErrors(QList<QSslError> errors) noexcept
 {
     auto error = errors.takeFirst();
     if (error.error() == QSslError::HostNameMismatch)
@@ -188,7 +205,7 @@ void Client::processMessage(const Message& message) noexcept
     {
         case Message::Type::Hello:
             Logger::printGreen("Connection successful");
-            waitingForPasswordACK = false;
+            state = State::Connected;
             emit connected();
             break;
 

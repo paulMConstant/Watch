@@ -1,6 +1,7 @@
 #include "HMI/networkdisplay.h"
 
 #include <QSettings>
+#include <QtGlobal> 
 
 #include "ui_networkdisplay.h"  // NOLINT[build/include_subdir]
 #include "Network/client.h"
@@ -14,10 +15,9 @@ NetworkDisplay::NetworkDisplay(QWidget* parent) noexcept:
 {
     ui->setupUi(this);
     Logger::init(ui->messageList);
-    connect(ui->serverLine, SIGNAL(returnPressed()), SLOT(setFocus()));
-    connect(ui->nameLine, SIGNAL(returnPressed()), SLOT(setFocus()));
+    connect(ui->serverLine, &QLineEdit::returnPressed, this, qOverload<>(&QWidget::setFocus));
+    connect(ui->nameLine, &QLineEdit::returnPressed, this, qOverload<>(&QWidget::setFocus));
     qApp->installEventFilter(this);
-
 
     QSettings settings(Global::organizationName, Global::appName);
     if (settings.allKeys().contains(userNameSettingsKey))
@@ -41,15 +41,16 @@ NetworkDisplay::~NetworkDisplay()
 void NetworkDisplay::setClient(Client* client) noexcept
 {
     this->client = client;
-    connect(ui->connectButton, SIGNAL(clicked(bool)), this, SLOT(onConnectPressed()));
-    connect(ui->serverLine, SIGNAL(returnPressed()), this, SLOT(setFocus()));
-    connect(ui->nameLine, SIGNAL(editingFinished()), this, SLOT(changeName()));
-    connect(ui->messageLine, SIGNAL(returnPressed()), this, SLOT(sendChatMessage()));
+    connect(ui->connectButton, &QPushButton::clicked, this, &NetworkDisplay::onConnectPressed);
+    connect(ui->serverLine, &QLineEdit::returnPressed, this, qOverload<>(&QWidget::setFocus));
+    connect(ui->nameLine, &QLineEdit::editingFinished, this, &NetworkDisplay::changeName);
+    connect(ui->messageLine, &QLineEdit::returnPressed, this, &NetworkDisplay::sendChatMessage);
 
-    connect(client, SIGNAL(connectionsChanged(QStringList)),
-            this, SLOT(updateConnectedUsersList(QStringList)));
-    connect(client, SIGNAL(disconnected()), this, SLOT(onDisconnected()));
-    connect(client, SIGNAL(connected()), this, SLOT(onConnected()));
+    connect(client, &Client::connectionsChanged,
+            this, &NetworkDisplay::updateConnectedUsersList);
+    connect(client, &Client::disconnected, this, &NetworkDisplay::onDisconnected);
+    connect(client, &Client::connected, this, &NetworkDisplay::onConnected);
+    connect(client, &Client::connecting, this, &NetworkDisplay::onConnecting);
 
     changeName();
 }
@@ -81,11 +82,25 @@ void NetworkDisplay::onConnected() noexcept
     ui->connectButton->setText("Disconnect");
 }
 
+void NetworkDisplay::onConnecting() noexcept
+{
+    ui->serverLine->setEnabled(false);
+    ui->serverLabel->setEnabled(false);
+    ui->nameLine->setEnabled(false);
+    ui->nameLabel->setEnabled(false);
+    ui->connectButton->setText("Cancel");
+}
+
 void NetworkDisplay::onConnectPressed() noexcept
 {
     if (client->isConnectedToServer())
     {
         client->disconnectFromServer();
+    }
+    else if (client->isConnectingToServer())
+    {
+        client->cancelConnecting();
+        onDisconnected();
     }
     else
     {

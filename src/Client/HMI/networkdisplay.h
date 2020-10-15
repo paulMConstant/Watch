@@ -30,6 +30,7 @@ class NetworkDisplay : public QWidget
     void sendChatMessage() noexcept;
     void onDisconnected() noexcept;
     void onConnected() noexcept;
+    void onConnecting() noexcept;
 
   private:
     Ui::NetworkDisplay* ui;
