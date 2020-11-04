@@ -18,9 +18,7 @@ find_package(Qt5Widgets REQUIRED)
 
 include_directories(${PROJECT_SOURCE_DIR})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/..)
-
-#link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../Messages/build)
-link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../include/vlc-qt)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../include/vlc-qt)
 
 set(SRCS
     Global/global.cpp Global/global.cpp
