@@ -21,7 +21,8 @@ Client::Client()
 
     connect(socket, &QSslSocket::connected, this, &Client::onConnected);
     connect(socket, &QSslSocket::disconnected, this, &Client::onDisconnected);
-    connect(socket, qOverload<>(&QSslSocket::error), this, &Client::socketError);
+    connect(socket, static_cast<void (QSslSocket::*)(QAbstractSocket::SocketError)>
+            (&QAbstractSocket::errorOccurred), this, &Client::socketError);
     connect(socket, qOverload<const QList<QSslError>&>(&QSslSocket::sslErrors),
             this, &Client::sslErrors);
     connect(socket, &QSslSocket::readyRead, this, &Client::dataReceived);
