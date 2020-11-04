@@ -36,6 +36,7 @@
 build*/
 Debug/
 Release/
+MinSizeRel/
 
 # .user
 *.user*
