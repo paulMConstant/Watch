@@ -117,8 +117,8 @@ void Player::askOpenURL() noexcept
 
 void Player::shareCurrentMedia() noexcept
 {
-    if (player->currentMedia() == nullptr)
     {
+    if (player->currentMedia() == nullptr)
         Logger::printRed("Cannot share media : no open media.");
         return;
     }
@@ -164,14 +164,12 @@ void Player::playFile(const QString& file) noexcept
     currentFile = file;
     auto local = currentFileIsLocal();
     media = new VlcMedia(currentFile, local, instance);
-    player->open(media);
-    ui->playPause->setIcon(QIcon(":/icons/pause"));
-    auto filename = currentFile;
-    if (local)
-    {
-        filename = QFileInfo(currentFile).fileName();
-    }
+    auto filename = [this, local]
+        { return (local ? QFileInfo(currentFile).fileName() : currentFile); }();
     client->sendInfo("playing '" + filename + "'.");
+    qDebug() << filename;
+    player->open(media);
+    //play(true);
 }
 
 bool Player::currentFileIsLocal() noexcept

@@ -68,5 +68,5 @@ void CustomSignalsMediaPlayer::pause()
 void CustomSignalsMediaPlayer::open(VlcMedia* media)
 {
     VlcMediaPlayer::open(media);
-    paused = false;
+    play();
 }
