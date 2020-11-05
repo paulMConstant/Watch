@@ -15,7 +15,7 @@ bool CustomSignalsMediaPlayer::isPaused() const noexcept
 
 bool CustomSignalsMediaPlayer::videoIsPlayable() const noexcept
 {
-    return currentMedia() != nullptr && timeIsPlayable(time());
+    return timeIsPlayable(time());
 }
 
 bool CustomSignalsMediaPlayer::timeIsPlayable(int timeMS) const noexcept
@@ -44,8 +44,10 @@ void CustomSignalsMediaPlayer::noSignalPause()
 void CustomSignalsMediaPlayer::setTime(int timeMS)
 {
     // Avoid sending too much data at once to server
-    constexpr auto minSetTimeIntervalMS = 20;
-    if (lastTimeSetTime.elapsed() > minSetTimeIntervalMS && timeIsPlayable(timeMS))
+    constexpr auto minSetTimeIntervalMS {20};
+    const auto canSendTime 
+        {lastTimeSetTime.elapsed() > minSetTimeIntervalMS && timeIsPlayable(timeMS)};
+    if (canSendTime)
     {
         noSignalSetTime(timeMS);
         lastTimeSetTime.start();

@@ -167,9 +167,8 @@ void Player::playFile(const QString& file) noexcept
     auto filename = [this, local]
         { return (local ? QFileInfo(currentFile).fileName() : currentFile); }();
     client->sendInfo("playing '" + filename + "'.");
-    qDebug() << filename;
     player->open(media);
-    //play(true);
+    setPauseIcon();
 }
 
 bool Player::currentFileIsLocal() noexcept
@@ -262,9 +261,14 @@ void Player::play(bool sendSignal) noexcept
     {
         player->noSignalPlay();
     }
-    ui->playPause->setIcon(QIcon(":/icons/pause"));
+    setPauseIcon();
 }
 
+void Player::setPauseIcon() noexcept
+{
+    ui->playPause->setIcon(QIcon(":/icons/pause"));
+}
+    
 void Player::stopVideoIfEnded() noexcept
 {
     if (player->videoIsPlayable() == false)

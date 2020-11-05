@@ -63,6 +63,7 @@ class Player : public QWidget
 
     void pause(bool sendSignal = true) noexcept;
     void play(bool sendSignal = true) noexcept;
+    void setPauseIcon() noexcept;
     [[nodiscard]] bool currentFileIsLocal() noexcept;
 
     static constexpr auto timeJumpMS = 3000;
