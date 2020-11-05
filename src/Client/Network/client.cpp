@@ -205,7 +205,7 @@ void Client::processMessage(const Message& message) noexcept
     switch (message.type)
     {
         case Message::Type::Hello:
-            Logger::printGreen("Connection successful");
+            Logger::printGreen("Connection successful.");
             state = State::Connected;
             emit connected();
             break;
